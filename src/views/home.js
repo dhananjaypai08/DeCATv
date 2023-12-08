@@ -121,7 +121,8 @@ const Home = (props) => {
             className="home-nav"
           >
             
-            <a href="/multiple" className="home-button2 button-clean button">
+            {isConnected && 
+            <div><a href="/multiple" className="home-button2 button-clean button">
               Multiple Transaction
             </a>
             <a href="/portfolio" className="home-button2 button-clean button">
@@ -129,11 +130,11 @@ const Home = (props) => {
             </a>
             <a href="/reputation" className="home-button2 button-clean button">
               Reputation
-            </a>
+            </a></div>}
           </nav>
         </div>
         <div data-thq="thq-navbar-btn-group" className="home-btn-group">
-          <div className="home-socials">
+          {/* <div className="home-socials">
             <button className="social button">
               <img
                 alt="image"
@@ -148,7 +149,7 @@ const Home = (props) => {
                 className="home-image01"
               />
             </button>
-          </div>
+          </div> */}
           <button onClick={!isConnected && connectWallet} className="button">
             {connectmsg}
           </button>
@@ -223,8 +224,8 @@ const Home = (props) => {
       </section>
       <section className="home-description">
       <div className="home-hero">
-      <label className='home-button7 button'>Total DeCAT Endorsements allowed: {endorsementsAllowed}
-      </label>
+      {isConnected && <label className='home-button7 button'>Total DeCAT Endorsements allowed: {endorsementsAllowed}
+      </label>}
       </div>
       <div className="home-container">
         <ul>{fetched_nftdata && 
