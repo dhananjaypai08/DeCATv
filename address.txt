@@ -7,9 +7,8 @@ DeCat - 0x472E343Dcd0917FD68Fae9300bEa02ED2D1ecebE
 
 
 Scroll
-DeCat - 
-npx hardhat run --network scrollSepolia ./src/scripts/deploy.js
-npx hardhat verify --network scrollSepolia <address>
+DeCat - 0x004b833D377e24830d19A5563009d7f1278525b3
+DeCAT Verify - https://sepolia-blockscout.scroll.io/address/0x004b833D377e24830d19A5563009d7f1278525b3#code
 SBT(old) - 0x798dEd76b55aC40bDBc607BE0038Becf7074A26B
 
 
