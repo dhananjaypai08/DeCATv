@@ -159,22 +159,7 @@ const Home = (props) => {
           </nav>
         </div>
         <div data-thq="thq-navbar-btn-group" className="home-btn-group">
-          {/* <div className="home-socials">
-            <button className="social button">
-              <img
-                alt="image"
-                src="/Icons/twitter.svg"
-                className="home-image"
-              />
-            </button>
-            <button className="social button">
-              <img
-                alt="image"
-                src="/Icons/discord.svg"
-                className="home-image01"
-              />
-            </button>
-          </div> */}
+          
           <button onClick={checkConnectionBeforeConnecting} className="button">
             {connectmsg}
           </button>
@@ -248,10 +233,10 @@ const Home = (props) => {
         </div>
       </section>
       <section className="home-description">
-      <div className="home-hero">
-      {isConnected && <label className='home-button7 button'>Total DeCAT Endorsements allowed: {endorsementsAllowed}
-      </label>}
-      </div>
+      {isConnected && <div className="home-hero">
+      <label className='home-button7 button'>Total DeCAT Endorsements allowed: {endorsementsAllowed}
+      </label>
+      </div>}
       <div className="home-container">
        <label className='home-button7 button'>DeCAT SBT's minted to your account
       </label>
@@ -293,24 +278,7 @@ const Home = (props) => {
           src="/hero-divider-1500w.png"
           className="home-divider-image"
         />
-        {/* <div className="home-container3">
-          <div className="home-description01">
-            <div className="home-content">
-              <p className="home-paragraph">
-                We are a team of web3 enthusiasts passionate about building
-                Systems that would not only revolutionize the world But also
-                shape the world into a better future.
-              </p>
-              <p className="home-paragraph1">
-                DeCAT is set to release on public blockchain Layer2. The first
-                working model is set to be deployed on Polygon mumbai testnet.
-                Why Polygon? Provides scalability enabling rollup mechanism
-                which plays a critical role in multibatch transactions.
-              </p>
-            </div>
-            
-          </div>
-        </div> */}
+        
       </section>
       <section className="home-cards">
         <div className="home-row">
@@ -353,38 +321,8 @@ const Home = (props) => {
             </div>
           </div>
         </div>
-        <div className="home-card02">
-        <div className="home-row">
-        {/* Card 1 */}
-        <div className="home-content">
-          <div className="card">
-            <div className="card-body">
-              <h3 className="card-title">Sol Bound Ticket</h3>
-              <p className="card-text">Content for Card 1 goes here.</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="home-content">
-          <div className="card">
-            <div className="card-body">
-              <h3 className="card-title">Card 1 Title</h3>
-              <p className="card-text">Content for Card 1 goes here.</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="home-content">
-          <div className="card">
-            <div className="card-body">
-              <h3 className="card-title">Card 1 Title</h3>
-              <p className="card-text">Content for Card 1 goes here.</p>
-            </div>
-          </div>
-        </div>
-        </div>
-      </div>
-     
+        
+         
         
       </section>
 
@@ -392,10 +330,9 @@ const Home = (props) => {
         <div className="home-main5">
           <div className="home-branding">
             <div className="home-heading10">
-              <h2 className="home-logo2">Character</h2>
+              <h2 className="home-logo2">ZKBuilders</h2>
               <p className="home-caption17">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore.
+              Empower your professional journey with Decat. Join us in creating a job market where trust is inherent, and your identity is truly yours. Let's build a decentralized future together.
               </p>
             </div>
             <div className="home-socials1">
@@ -492,7 +429,7 @@ const Home = (props) => {
           </div>
         </div>
         <span className="home-copyright">
-          © 2022 Character. All Rights Reserved.
+          © 2023 Character. All Rights Reserved.
         </span>
       </footer>
       <div>
