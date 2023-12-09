@@ -1,4 +1,21 @@
 ﻿Sr No,address,name,description
-1,0x367a8AB9E269E7841828e71f8675fbae01443D2d,Modules of Java Springboot,Java Workshop on Building API's using SpringBoot
-2,0xFFc206f3779CdeBc242220Af294c336a00AD4C5C,Data Science Workshop,"Pandas, numpy 2 hour workshop"
-3,0xeFE06D73C547836fB79b95b3F889634319559fEb,Javascript workshop,2 hours Javascript workshop including promises and data types
+1,0x367a8AB9E269E7841828e71f8675fbae01443D2d,UI/UX Level 2 Course,Figma Intoduction and Aesthetics 
+2,0xFFc206f3779CdeBc242220Af294c336a00AD4C5C,Data Science Introductory Course,"Pandas, numpy 2 hour workshop"
+3,0xeFE06D73C547836fB79b95b3F889634319559fEb,UI/UX Level 2 Course,Figma Intoduction and Aesthetics 
+4,0x4Bb98D509665DcE1cB97bDc33cE3bD9A7D32eA9b,Full Stack Web Development,both frontend and backend technologies to build and deploy dynamic and scalable web applications
+5,0xb588957E274E6A9835691b098d4eFA095B8C236f,Data Science Introductory Course,"Pandas, numpy 2 hour workshop"
+6,0xb588957E274E6A9835691b098d4eFA095B8C236f,Python Basics,"fundamental introduction to the syntax, data types, control structures, and core concepts of the Python programming language."
+7,0x860D738d9F987552016010F949e83b4446DC959d,Road to Python Expert,"Python concepts, frameworks, and best practices, empowering them to become proficient Python developers"
+8,0x80F0a4D38e36eb721537Bb5d6c3DaEb4b1ade227,Full Stack Web Development,both frontend and backend technologies to build and deploy dynamic and scalable web applications
+9,0x82624df307F7801a555474DA97F1450f3320BDCb,Full Stack Web Development,both frontend and backend technologies to build and deploy dynamic and scalable web applications
+10,0x0e6E30A4c268F552a85C9E454430772DF420372E,Data Science Introductory Course,"Pandas, numpy 2 hour workshop"
+11,0xdb5640BE5F58e58dcd5aA04200F0a89a835b480b,UI/UX Level 2 Course,Figma Intoduction and Aesthetics 
+12,0x898405300697FF3a38037b4871d5defccE70654f,Python Basics,"fundamental introduction to the syntax, data types, control structures, and core concepts of the Python programming language."
+13,0x5520539839A0723c820c87d20aEFDE80AF238456,Full Stack Web Development,both frontend and backend technologies to build and deploy dynamic and scalable web applications
+14,0x8756552BF5B1AF9BaCDe7c5BE4e45CE731D65e48,Data Science Introductory Course,"Pandas, numpy 2 hour workshop"
+15,0x8756552BF5B1AF9BaCDe7c5BE4e45CE731D65e48,Python Basics,"fundamental introduction to the syntax, data types, control structures, and core concepts of the Python programming language."
+16,0x82624df307F7801a555474DA97F1450f3320BDCb,Road to Python Expert,"Python concepts, frameworks, and best practices, empowering them to become proficient Python developers"
+17,0xeFE06D73C547836fB79b95b3F889634319559fEb,Python Basics,"fundamental introduction to the syntax, data types, control structures, and core concepts of the Python programming language."
+18,0x4Bb98D509665DcE1cB97bDc33cE3bD9A7D32eA9b,Road to Python Expert,"Python concepts, frameworks, and best practices, empowering them to become proficient Python developers"
+19,0x860D738d9F987552016010F949e83b4446DC959d,UI/UX Level 2 Course,Figma Intoduction and Aesthetics 
+20,0xb588957E274E6A9835691b098d4eFA095B8C236f,Full Stack Web Development,both frontend and backend technologies to build and deploy dynamic and scalable web applications
