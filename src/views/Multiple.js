@@ -34,6 +34,12 @@ const Multiple = () => {
         setFile(event.target.files[0]);
     };
 
+    const checkConnectionBeforeConnecting = () => {
+      if(!isConnected){
+        connectWallet();
+      }
+    }
+
     const handleCsvSelect = (event) => {
       const csvfile = event.target.files[0];
       if (csvfile) {
@@ -225,7 +231,7 @@ const Multiple = () => {
                   />
                 </button>
               </div>
-              <button onClick={!isConnected && connectWallet} className="button">
+              <button onClick={checkConnectionBeforeConnecting} className="button">
                 {connectmsg}
               </button>
               

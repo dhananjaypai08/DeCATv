@@ -31,7 +31,12 @@ const ReputationSystem = (props) => {
   const nftipfsAddress = "https://gateway.lighthouse.storage/ipfs/";
   const randomColor = () => `rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, 0.2)`;
 
-  
+  const checkConnectionBeforeConnecting = () => {
+    if(!isConnected){
+      connectWallet();
+    }
+  }
+
   const connectWallet = async () => {
     const contractAddress = "0x798dEd76b55aC40bDBc607BE0038Becf7074A26B";//"0xe8750E54151a8eA203ef65e0fB11230676b9b033";
     const contractAbi = abi.abi;
@@ -148,7 +153,7 @@ const ReputationSystem = (props) => {
               />
             </button>
           </div>
-          <button onClick={!isConnected && connectWallet} className="button">
+          <button onClick={checkConnectionBeforeConnecting} className="button">
             {connectmsg}
           </button>
         </div>
@@ -210,7 +215,7 @@ const ReputationSystem = (props) => {
           </p>
         </div>
         <div className="home-buttons">
-          <button onClick={!isConnected && connectWallet} className="button">
+          <button onClick={checkConnectionBeforeConnecting} className="button">
             {connectmsg}
           </button>
         </div>

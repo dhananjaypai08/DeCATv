@@ -26,6 +26,13 @@ const Verify = () => {
   const { provider, signer, contract, account, authenticated } = state;
   const [isConnected, setConnection] = useState(false);
   const [connectmsg, setMsg] = useState("Connect Wallet");
+
+  const checkConnectionBeforeConnecting = () => {
+    if(!isConnected){
+      connectWallet();
+    }
+  }
+  
   const connectWallet = async () => {
     const contractAddress = "0x428E1588cD8a3FA448c7539bfDB8354A143FDF09";
     const contractAbi = abi.abi;
@@ -106,7 +113,7 @@ const Verify = () => {
               />
             </button>
           </div>
-          <button onClick={!isConnected && connectWallet} className="button">
+          <button onClick={checkConnectionBeforeConnecting} className="button">
             {connectmsg}
           </button>
         </div>
@@ -171,7 +178,7 @@ const Verify = () => {
           </p>
         </div>
         <div className="home-buttons">
-          <button onClick={!isConnected && connectWallet} className="button">
+          <button onClick={checkConnectionBeforeConnecting} className="button">
             {connectmsg}
           </button>
           <button className="home-learn button-clean button">Learn more</button>

@@ -29,6 +29,12 @@ const Home = (props) => {
   const [admin, setAdmin] = useState(false);
 
   const nftipfsAddress = "https://gateway.lighthouse.storage/ipfs/";
+
+  const checkConnectionBeforeConnecting = () => {
+    if(!isConnected){
+      connectWallet();
+    }
+  }
   
   const connectWallet = async () => {
     const contractAddress = "0x798dEd76b55aC40bDBc607BE0038Becf7074A26B";//"0x798dEd76b55aC40bDBc607BE0038Becf7074A26B"; 0x472E343Dcd0917FD68Fae9300bEa02ED2D1ecebE; 
@@ -151,7 +157,7 @@ const Home = (props) => {
               />
             </button>
           </div> */}
-          <button onClick={!isConnected && connectWallet} className="button">
+          <button onClick={checkConnectionBeforeConnecting} className="button">
             {connectmsg}
           </button>
         </div>
@@ -216,7 +222,7 @@ const Home = (props) => {
           </p>
         </div>
         <div className="home-buttons">
-          <button onClick={!isConnected && connectWallet} className="button">
+          <button onClick={checkConnectionBeforeConnecting} className="button">
             {connectmsg}
           </button>
           <button className="home-learn button-clean button">Learn more</button>
