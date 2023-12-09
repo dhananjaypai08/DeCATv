@@ -5,7 +5,7 @@ import { Helmet } from "react-helmet";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { Redirect } from 'react-router-dom'
-import abi from "../contracts/test.json";
+import abi from "../contracts/decat.json";
 //import './App.css';
 import { ethers } from "ethers";
 
@@ -22,11 +22,15 @@ const Portfolio = () => {
   const [nft_data, setNFTData] = useState([]);
   const [fetched_nftdata, setNFT] = useState(false);
   const [loader, setLoader] = useState(false);
+  const [endorsed_mints, setEndorsingData] = useState([]);
+  const [get_endorsed_cids, setEndorsedCid] = useState([]);
+  const [total_endorsed_mints, setEndorsedMints] = useState("Please Enter an address first");
+
   const nftipfsAddress = "https://gateway.lighthouse.storage/ipfs/";
 
   useEffect(() => {
     const connectWallet = async () => {
-      const contractAddress = "0x798dEd76b55aC40bDBc607BE0038Becf7074A26B";//"0xe8750E54151a8eA203ef65e0fB11230676b9b033";
+      const contractAddress = "0x61eFE56495356973B350508f793A50B7529FF978";//"0xe8750E54151a8eA203ef65e0fB11230676b9b033";
       const contractAbi = abi.abi;
       try {
         const { ethereum } = window;
@@ -71,8 +75,10 @@ const Portfolio = () => {
     if(contract != undefined && signer!=undefined){
         const address = document.querySelector('#walletaddress').value;
         const contractwithsigner = contract.connect(signer);
-        const resp = await contractwithsigner.total_sbt_received_in_account(address);
+        const resp = await contractwithsigner.total_sbt_received_from_org(address);
         setAddressMints(resp.toNumber());
+        const endorsedmints = await contractwithsigner.getEndorsementsReceived(address);
+        setEndorsedMints(endorsedmints.toNumber())
         // const client = new CovalentClient("cqt_rQt3xrBGR96Gg3bp7qk7vGJDQ8rV");
         // const response = await client.BalanceService.getTokenBalancesForWalletAddress("eth-sepolia",address, {"nft": true});
         // console.log(response.data["items"], response.data["items"].length);
@@ -92,7 +98,21 @@ const Portfolio = () => {
           }
           
         }
+        const endorsed_nfts = await contractwithsigner.getTokenIdAccountEndorsing(address);
+        let endorsed = [];
+        let endorsed_ipfs = [];
+        for(var i=0;i<endorsed_nfts.length;i++){
+          const tokenId = endorsed_nfts[i].toNumber();
+          const ipfs_endorsed = await contractwithsigner.tokenURI(tokenId);
+          console.log(ipfs_endorsed);
+          await axios.get(nftipfsAddress+ipfs_endorsed).then((metadata) => {
+            endorsed_ipfs.push(ipfs_endorsed);
+            endorsed.push(metadata.data);
+          });
+        }
         console.log(nft_datas);
+        setEndorsingData(endorsed);
+        setEndorsedCid(endorsed_ipfs);
         setNFT(true);
         setNFTData(nft_datas);
         setLoader(false);
@@ -190,6 +210,7 @@ const Portfolio = () => {
       <div className="home-hero">
       <label className='home-button7 button'>Total DeCAT NFT's Minted: {address_mints}
       </label>
+      <label className='home-button7 button'>Total DeCAT NFT's Endorsed to you: {total_endorsed_mints}</label>
       </div>
       
       
@@ -224,8 +245,27 @@ const Portfolio = () => {
     </form>
 
     <div className="home-container">
+    <label className='home-button7 button'>DeCAT SBT's minted to your account
+      </label>
         <ul className="flex-container">{fetched_nftdata && 
         nft_data.map(nft => (
+        <>
+          <div className="home-card" style={{width: 700}}>
+          <li className="home-paragraph">{nft.name}: <br></br>{nft.description}
+          <img src={nft.image} className="home-image06" ></img>
+          </li>
+          <br></br>
+          </div>
+        </>
+        ))}
+        </ul>
+    </div>
+
+    <div className="home-container">
+    <label className='home-button7 button'>DeCAT SBT's endorsed to your account
+      </label>
+        <ul className="flex-container">{fetched_nftdata && 
+        endorsed_mints.map(nft => (
         <>
           <div className="home-card" style={{width: 700}}>
           <li className="home-paragraph">{nft.name}: <br></br>{nft.description}

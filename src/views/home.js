@@ -4,7 +4,7 @@ import Script from "dangerous-html/react";
 import { Helmet } from "react-helmet";
 import { useState, useEffect } from "react";
 import { Redirect } from 'react-router-dom'
-import abi from "../contracts/test.json";
+import abi from "../contracts/decat.json";
 //import './App.css';
 import { ethers } from "ethers";
 import axios from "axios";
@@ -23,7 +23,10 @@ const Home = (props) => {
   const [totalmints, setMints] = useState(0);
   const [nft_data, setNFTData] = useState([]);
   const [fetched_nftdata, setNFT] = useState(false);
-  const [get_cids, setCID] = useState([]);
+  const [get_nft_cids, setNftCID] = useState([]);
+  const [endorsed_mints, setEndorsingData] = useState([]);
+  const [get_endorsed_cids, setEndorsedCid] = useState([]);
+  const [total_endorsements, setTotalEndorsements] = useState(0);
   const [ipfs_hash, setHash] = useState();
   const [endorsementsAllowed, setEndorsementsAllowed] = useState(0);
   const [admin, setAdmin] = useState(false);
@@ -37,7 +40,7 @@ const Home = (props) => {
   }
   
   const connectWallet = async () => {
-    const contractAddress = "0x798dEd76b55aC40bDBc607BE0038Becf7074A26B";//"0x798dEd76b55aC40bDBc607BE0038Becf7074A26B"; 0x472E343Dcd0917FD68Fae9300bEa02ED2D1ecebE; 
+    const contractAddress = "0x61eFE56495356973B350508f793A50B7529FF978";//"0x798dEd76b55aC40bDBc607BE0038Becf7074A26B"; 0x472E343Dcd0917FD68Fae9300bEa02ED2D1ecebE; 
     const contractAbi = abi.abi;
     try {
       const { ethereum } = window;
@@ -74,7 +77,8 @@ const Home = (props) => {
         const resp = await contractwithsigner.getTotalMints();
         const mints = resp.toNumber()
         setMints(mints);
-
+        const endorsements_total = await contractwithsigner.total_endorsements();
+        setTotalEndorsements(endorsements_total.toNumber());
         const nfts = await contractwithsigner.getTokenIdAccount(account);
         let nft_datas = [];
         let ipfs_cids = [];
@@ -88,10 +92,24 @@ const Home = (props) => {
           });
         }
         console.log(nft_datas);
+        const endorsed_nfts = await contractwithsigner.getTokenIdAccountEndorsing(account);
+        let endorsed = [];
+        let endorsed_ipfs = [];
+        for(var i=0;i<endorsed_nfts.length;i++){
+          const tokenId = endorsed_nfts[i].toNumber();
+          const ipfs_endorsed = await contractwithsigner.tokenURI(tokenId);
+          console.log(ipfs_endorsed);
+          await axios.get(nftipfsAddress+ipfs_endorsed).then((metadata) => {
+            endorsed_ipfs.push(ipfs_endorsed);
+            endorsed.push(metadata.data);
+          });
+        }
         setNFT(true);
-        setCID(ipfs_cids);
+        setNftCID(ipfs_cids);
         setNFTData(nft_datas);
-        const response = await contractwithsigner.getEndorsementCheck(account);
+        setEndorsingData(endorsed);
+        setEndorsedCid(endorsed_ipfs);
+        const response = await contractwithsigner.GetEndorsementsAllowed(account);
         const endorsements_allowed = response.toNumber();
         setEndorsementsAllowed(endorsements_allowed);
       }
@@ -103,7 +121,7 @@ const Home = (props) => {
   const handleButtonClick = (index) => {
     if(endorsementsAllowed<1){
       alert("You are not allowed to make any endorsements");
-    }else{setHash(get_cids[index]);}
+    }else{setHash(get_nft_cids[index]);}
   };
 
   return (
@@ -211,8 +229,9 @@ const Home = (props) => {
         </div>
       </header>
       
-      {isConnected && <label className='home-button7 button'>Total DeCAT NFT's Minted: {totalmints}
+      {isConnected && <label className='home-button7 button'>Total DeCAT Minting Volumne: {totalmints}
       </label>}<br></br>
+      {isConnected && <label className='home-button7 button'>Total DeCAT Endorsed Volume: {total_endorsements}</label>}<br></br>
       {isConnected && admin && <Loginsystem></Loginsystem>}
       <section className="home-hero">
         <div className="home-heading">
@@ -234,6 +253,8 @@ const Home = (props) => {
       </label>}
       </div>
       <div className="home-container">
+       <label className='home-button7 button'>DeCAT SBT's minted to your account
+      </label>
         <ul>{fetched_nftdata && 
         nft_data.map((nft, index) => (
         <>
@@ -242,8 +263,26 @@ const Home = (props) => {
           <img src={nft.image} className="home-image06" ></img>
           </li>
           <br></br>
-          {ipfs_hash !== get_cids[index] && <button className='home-button6 button' onClick={() => handleButtonClick(index)}>Endorse</button>}
-          {ipfs_hash == get_cids[index] && <Endorse passedValue={ipfs_hash}></Endorse>}
+          {ipfs_hash !== get_nft_cids[index] && <button className='home-button6 button' onClick={() => handleButtonClick(index)}>Endorse</button>}
+          {ipfs_hash == get_nft_cids[index] && <Endorse passedValue={ipfs_hash}></Endorse>}
+          </div>
+          </>
+        ))}
+        </ul>
+    </div>
+    
+    <div className="home-container">
+      <label className='home-button7 button'>DeCAT SBT's endorsed to your account
+      </label>
+        <ul>{fetched_nftdata && 
+        endorsed_mints.map((nft, index) => (
+        <>
+          <div className="home-card" style={{width: 700}} key={index}>
+          <li className="home-paragraph">{nft.name}: <br></br>{nft.description}
+          <img src={nft.image} className="home-image06" ></img>
+          </li>
+          <br></br>
+
           </div>
           </>
         ))}

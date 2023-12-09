@@ -9,7 +9,7 @@ import { Helmet } from "react-helmet";
 import { useAppContext } from '../AppContext';
 import { create as ipfsHttpClient } from "ipfs-http-client";
 import Papa from 'papaparse';
-import abi from "../contracts/test.json";
+import abi from "../contracts/decat.json";
 import lighthouse from '@lighthouse-web3/sdk';
 
 const projectId = '2WCbZ8YpmuPxUtM6PzbFOfY5k4B';
@@ -84,7 +84,7 @@ const Multiple = () => {
         console.log(resp)
     } 
     const connectWallet = async () => {
-      const contractAddress = "0x798dEd76b55aC40bDBc607BE0038Becf7074A26B";//"0xe8750E54151a8eA203ef65e0fB11230676b9b033";
+      const contractAddress = "0x61eFE56495356973B350508f793A50B7529FF978";//"0xe8750E54151a8eA203ef65e0fB11230676b9b033";
       const contractAbi = abi.abi;
       try {
         const { ethereum } = window;

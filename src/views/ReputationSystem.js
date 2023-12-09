@@ -3,7 +3,7 @@ import React from "react";
 import Script from "dangerous-html/react";
 import { Helmet } from "react-helmet";
 import { useState, useEffect } from "react";
-import abi from "../contracts/test.json";
+import abi from "../contracts/decat.json";
 //import './App.css';
 import { ethers } from "ethers";
 import axios from "axios";
@@ -22,11 +22,10 @@ const ReputationSystem = (props) => {
   const [reputation_score, setReputationScore] = useState([]);
   const [randomBgcolor, setRandomBg] = useState([]);
   const [showGraph, setGraph] = useState(false);
-  const [currReputation, setReputation] = useState({
-    cur_mints: 0,
-    cur_endorsements: 0,
-    total_score: 0
-  })
+  const [curr_mints, settotalMints] = useState(0);
+  const [curr_endorsements_received, setEndorsementReceived] = useState(0);
+  const [curr_endorsements_given, setEndorsementGiven] = useState(0);
+  const [curr_reputation, setCurReputation] = useState(0);
 
   const nftipfsAddress = "https://gateway.lighthouse.storage/ipfs/";
   const randomColor = () => `rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, 0.2)`;
@@ -38,7 +37,7 @@ const ReputationSystem = (props) => {
   }
 
   const connectWallet = async () => {
-    const contractAddress = "0x798dEd76b55aC40bDBc607BE0038Becf7074A26B";//"0xe8750E54151a8eA203ef65e0fB11230676b9b033";
+    const contractAddress = "0x61eFE56495356973B350508f793A50B7529FF978";//"0xe8750E54151a8eA203ef65e0fB11230676b9b033";
     const contractAbi = abi.abi;
     try {
       const { ethereum } = window;
@@ -74,19 +73,23 @@ const ReputationSystem = (props) => {
         const all_accounts = await contractwithsigner.getAccounts();
         setAccounts(all_accounts);
         let scores = [];
-        let curr_mints = 0;
-        let curr_endorsements = 0;
+        let current_mints = 0;
+        let curr_endorsements_received = 0;
+        let curr_endorsements_given = 0;
         let total_acc_score = 0;
         for(let i = 0; i<all_accounts.length; i++){
-            const sbt_score = await contractwithsigner.total_sbt_received_in_account(all_accounts[i]);
-            const endorsement_score = await contractwithsigner.getEndorsements(all_accounts[i]);
-            scores.push(sbt_score.toNumber()+endorsement_score.toNumber());
-            console.log(account, all_accounts[i]);
-            if(all_accounts[i] === account){
-              curr_mints = sbt_score.toNumber();
-              curr_endorsements = endorsement_score.toNumber();
-              console.log('acg', curr_mints, curr_endorsements);
-              total_acc_score = curr_mints+curr_endorsements;
+            const sbt_score = await contractwithsigner.total_sbt_received_from_org(all_accounts[i]);
+            const endorsement_score = await contractwithsigner.GetEndorsementsAllowed(all_accounts[i]);
+            const endorsement_given = await contractwithsigner.total_endorsement_given(all_accounts[i]);
+            scores.push(sbt_score.toNumber()+endorsement_score.toNumber()*0.75+endorsement_given.toNumber()*0.5);
+            console.log(all_accounts[i], account);
+            if(all_accounts[i].toLowerCase() == account){
+              current_mints = sbt_score.toNumber();
+              curr_endorsements_received = endorsement_score.toNumber();
+              curr_endorsements_given = endorsement_given.toNumber();
+              console.log(current_mints, curr_endorsements_received, curr_endorsements_given);
+              total_acc_score = current_mints+curr_endorsements_received*0.75+curr_endorsements_given*0.5;
+              console.log(total_acc_score);
             }
         }
         setReputationScore(scores);
@@ -96,8 +99,11 @@ const ReputationSystem = (props) => {
         const randombg = Array.from({ length: all_accounts.length }, () => randomColor());
         setRandomBg(randombg);
         setGraph(true);
-        setReputation({cur_mints: curr_mints, cur_endorsements: curr_endorsements, total_score: total_acc_score});
-        console.log(curr_mints, currReputation.cur_mints);
+        settotalMints(current_mints);
+        setEndorsementGiven(curr_endorsements_given);
+        setEndorsementReceived(curr_endorsements_received)
+        setCurReputation(total_acc_score);
+        console.log(current_mints, curr_endorsements_given, curr_endorsements_received, total_acc_score);
       }
     } catch (error) {
       console.log(error);
@@ -220,13 +226,13 @@ const ReputationSystem = (props) => {
           </button>
         </div>
       </section>
-      {isConnected && <label className='home-button7 button'>Total DeCAT NFT's Minted: {totalmints}
+      {isConnected && <label className='home-button7 button'>Total DeCAT Volume: {totalmints}
       </label>}
-      {isConnected && <label className='home-button7 button'>Total SBT's received in your Account: {currReputation.cur_mints}
+      {isConnected && <label className='home-button7 button'>Total SBT's endorsed to your Account: {curr_endorsements_received}
       </label>}
-      {isConnected && <label className='home-button7 button'>Total SBT's endorsed to your Account: {currReputation.cur_endorsements}
+      {isConnected && <label className='home-button7 button'>Total SBT's endorsed by you: {curr_endorsements_given}
       </label>}
-      {isConnected && <label className='home-button7 button'>Total Reputation Score: {currReputation.total_score}
+      {isConnected && <label className='home-button7 button'>Total Reputation Score: {curr_reputation}
       </label>} <br></br>
       <span className="home-logo">Reputation Chart</span>
       <div className="home-hero">
