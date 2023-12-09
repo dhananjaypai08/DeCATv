@@ -26,6 +26,11 @@ const ReputationSystem = (props) => {
   const [curr_endorsements_received, setEndorsementReceived] = useState(0);
   const [curr_endorsements_given, setEndorsementGiven] = useState(0);
   const [curr_reputation, setCurReputation] = useState(0);
+  const leaderboardData = accounts.map((account, index) => ({
+    account,
+    score: reputation_score[index],}))
+    leaderboardData.sort((a, b) => b.score - a.score);
+  
 
   const nftipfsAddress = "https://gateway.lighthouse.storage/ipfs/";
   const randomColor = () => `rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, 0.8)`;
@@ -255,13 +260,36 @@ const ReputationSystem = (props) => {
       }} 
     /> }
     </div>
+
+    <div className="leaderboard-container">
+      <h2 className="ld-title">LEADERBOARD</h2>
+      <table className="leaderboard-table">
+      <thead>
+      <tr>
+        <th>Account</th>
+        <th>Score</th>
+      </tr>
+     </thead>
+     <tbody>
+
+     {leaderboardData.map((data, index) => (
+        <tr key={index}>
+          <td>{data.account}</td>
+          <td>{data.score}</td>
+        </tr>
+      ))}
+    
+      </tbody>
+    </table>
+
+    </div>
+
       <section className="home-description">
         <img
           alt="image"
           src="/hero-divider-1500w.png"
           className="home-divider-image"
         />
-        
       </section>
 
       <footer className="home-footer">

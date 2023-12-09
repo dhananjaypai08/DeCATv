@@ -2527,3 +2527,86 @@
   font-weight: 600;
   margin-top: 100px;
 }
+
+.leaderboard-container {
+  font-family: sans-serif;
+  margin: 20px;
+}
+
+.ld-title {
+  font-size: 45px;
+  margin-bottom: 10px;
+  color: #ffc85b;
+  text-align: center;
+
+}
+
+.ld-list {
+  list-style: none;
+  padding: 10px;
+}
+
+.ld-item {
+  margin-bottom: 15px;
+}
+
+.account-name {
+  font-weight: bold;
+  margin-right: 5px;
+}
+
+.account-score {
+  color: #f2f2f2; /* Adjust color as needed */
+}
+
+.leaderboard-container {
+  font-family: Arial, sans-serif;
+  margin: 50px;
+  padding: 10px;
+}
+
+.leaderboard-table {
+  
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+  border: 1px solid black;
+  border-radius: 10px; /* Set the border-radius for rounded corners */
+  overflow: hidden;
+  background-color: white;
+}
+
+.leaderboard-table th,
+.leaderboard-table td {
+  border: 1px solid #e0e9ff;
+  padding: 15px;
+  text-align: left;
+  color: #061334;
+}
+
+th{
+  background-color: #ffffff;
+  color: black;
+  height: 5rem;
+  font-family: "Rubik", sans-serif;
+  font-size: 1.4rem;
+  padding: 0.5rem 2rem;
+  position: relative;
+}
+
+tr{
+  color: #fffefe;
+  font-family: sans-serif;
+  transition: all 0.2s ease-in-out;
+  border-radius: 0.2rem;
+}
+
+tr:hover {
+  background-color: #fadf57;
+  transform: scale(1.05);
+  color: #f2f2f2;
+  -webkit-box-shadow: 0px 5px 15px 8px #e4e7fb;
+  box-shadow: 0px 5px 15px 8px #e4e7fb;
+}
+
