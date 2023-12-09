@@ -143,23 +143,8 @@ const ReputationSystem = (props) => {
           </nav>
         </div>
         <div data-thq="thq-navbar-btn-group" className="home-btn-group">
-          <div className="home-socials">
-            <button className="social button">
-              <img
-                alt="image"
-                src="/Icons/twitter.svg"
-                className="home-image"
-              />
-            </button>
-            <button className="social button">
-              <img
-                alt="image"
-                src="/Icons/discord.svg"
-                className="home-image01"
-              />
-            </button>
-          </div>
-          <button onClick={checkConnectionBeforeConnecting} className="button">
+          
+          <button onClick={checkConnectionBeforeConnecting} className="button wallet-btn">
             {connectmsg}
           </button>
         </div>
@@ -213,20 +198,12 @@ const ReputationSystem = (props) => {
         </div>
       </header>
       <section className="home-hero">
-        <div className="home-heading">
-          <h1 className="home-header">Leveraging Modified Soul Bound Tokens</h1>
-          <p className="home-caption">
-            Decentralized Certificate Authority - A Non Fungible Token based
-            Dapp for Certificate Authorization
-          </p>
-        </div>
-        <div className="home-buttons">
-          <button onClick={checkConnectionBeforeConnecting} className="button">
-            {connectmsg}
-          </button>
-        </div>
+        
+      {!isConnected && <div className="EmptySpace">
+        <h1 className="home-header">Please connect Wallet.</h1>
+        </div>}
       </section>
-      {isConnected && <label className='home-button7 button'>Total DeCAT Volume: {totalmints}
+      {isConnected && <label className='mint-btn button'>Total DeCAT's Volume: {totalmints}
       </label>}
       {isConnected && <label className='home-button7 button'>Total SBT's endorsed to your Account: {curr_endorsements_received}
       </label>}
@@ -234,10 +211,10 @@ const ReputationSystem = (props) => {
       </label>}
       {isConnected && <label className='home-button7 button'>Total Reputation Score: {curr_reputation}
       </label>} <br></br>
-      <span className="home-logo">Reputation Chart</span>
+      {isConnected && <span className="reputation-txt">Reputation Chart</span>}
       <div className="home-hero">
       {showGraph &&  
-        <span className="home-logo">Reputation Chart</span> &&
+        <span className="reputation-txt">Reputation Chart</span>&&
         <Bar
       data={{ 
         // Name of the variables on x-axies for each bar 
@@ -284,34 +261,16 @@ const ReputationSystem = (props) => {
           src="/hero-divider-1500w.png"
           className="home-divider-image"
         />
-        <div className="home-container3">
-          <div className="home-description01">
-            <div className="home-content">
-              <p className="home-paragraph">
-                We are a team of web3 enthusiasts passionate about building
-                Systems that would not only revolutionize the world But also
-                shape the world into a better future.
-              </p>
-              <p className="home-paragraph1">
-                DeCAT is set to release on public blockchain Layer2. The first
-                working model is set to be deployed on Polygon mumbai testnet.
-                Why Polygon? Provides scalability enabling rollup mechanism
-                which plays a critical role in multibatch transactions.
-              </p>
-            </div>
-            
-          </div>
-        </div>
+        
       </section>
 
       <footer className="home-footer">
         <div className="home-main5">
           <div className="home-branding">
             <div className="home-heading10">
-              <h2 className="home-logo2">Character</h2>
+              <h2 className="home-logo2">ZKBuilders</h2>
               <p className="home-caption17">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore.
+              Empower your professional journey with Decat. Join us in creating a job market where trust is inherent, and your identity is truly yours. Let's build a decentralized future together.
               </p>
             </div>
             <div className="home-socials1">
@@ -408,7 +367,7 @@ const ReputationSystem = (props) => {
           </div>
         </div>
         <span className="home-copyright">
-          © 2022 Character. All Rights Reserved.
+          © 2023 Character. All Rights Reserved.
         </span>
       </footer>
       <div>

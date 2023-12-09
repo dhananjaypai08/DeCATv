@@ -140,13 +140,13 @@ const Portfolio = () => {
             data-thq="thq-navbar-nav-links"
             data-role="Nav"
             className="home-nav"
-          >
+          > <a href="/" className="home-button2 button-clean button">
+          Home
+        </a>
             <a href="/multiple" className="home-button2 button-clean button">
               Multiple Transaction
             </a>
-            <a href="/" className="home-button2 button-clean button">
-              Home
-            </a>
+            
             <a href="/reputation" className="home-button2 button-clean button">
               Reputation
             </a>
@@ -215,20 +215,7 @@ const Portfolio = () => {
       
       
       <section className="home-hero">
-        <div className="home-heading">
-          <h1 className="home-header">Leveraging Modified Soul Bound Tokens</h1>
-          <p className="home-caption">
-            Decentralized Certificate Authority - A Non Fungible Token based
-            Dapp for Certificate Authorization
-          </p>
-        </div>
-        <div className="home-buttons">
-          {/* <button onClick={!isConnected && connectWallet} className="button">
-            {connectmsg}
-          </button> */}
-          <button className="home-learn button-clean button">Learn more</button>
-        </div>
-
+       
     <div class="home-hero">
       <label className='home-button7 button'>Total NFT's Received from DeCAT: {address_mints}
       </label>
@@ -285,127 +272,9 @@ const Portfolio = () => {
           src="/hero-divider-1500w.png"
           className="home-divider-image"
         />
-        <div className="home-container3">
-          <div className="home-description01">
-            <div className="home-content">
-              <p className="home-paragraph">
-                We are a team of web3 enthusiasts passionate about building
-                Systems that would not only revolutionize the world But also
-                shape the world into a better future.
-              </p>
-              <p className="home-paragraph1">
-                DeCAT is set to release on public blockchain Layer2. The first
-                working model is set to be deployed on Polygon mumbai testnet.
-                Why Polygon? Provides scalability enabling rollup mechanism
-                which plays a critical role in multibatch transactions.
-              </p>
-            </div>
-          </div>
-        </div>
+        
       </section>
-      <section className="home-cards">
-        <div className="home-row">
-          <div className="home-card">
-            <div className="home-avatar">
-              <img
-                alt="image"
-                src="/Avatars/avatar.svg"
-                className="home-avatar1"
-              />
-            </div>
-            <div className="home-main">
-              <div className="home-content01">
-                <h2 className="home-header01">
-                  70% of the Certificates are web2 based or paper based
-                </h2>
-                <p className="home-description02">
-                  The project aims to tackle the problem of secure credential
-                  verification using SoulBound NFTs in a decentralized manner.
-                  By creating a Dapp with features for issuers to mint, manage,
-                  and verify NFTs, we intend to revolutionize how certificates
-                  and achievements are showcased and verified, enhancing their
-                  value and authenticity in the digital world.
-                </p>
-              </div>
-              <button className="home-learn1 button">
-                <span className="home-text07">Learn more</span>
-                <img
-                  alt="image"
-                  src="/Icons/arrow.svg"
-                  className="home-image02"
-                />
-              </button>
-            </div>
-          </div>
-          <div className="home-card01">
-            <div className="home-avatar2">
-              <img
-                alt="image"
-                src="/Avatars/default-avatar.svg"
-                className="home-avatar3"
-              />
-            </div>
-            <div className="home-main1">
-              <div className="home-content02">
-                <h2 className="home-header02">
-                  DeCAT : provides digital and decentralized certification
-                  authority
-                </h2>
-                <p className="home-description03">
-                  ensuring the authenticity and uniqueness of certificates,
-                  achievements, and credentials has become a critical concern.
-                  Traditional methods are susceptible to duplication and
-                  tampering, diminishing the value of these accolades. To
-                  address this issue, we aim to create a decentralized
-                  application (Dapp) that leverages modified ERC721 tokens
-                  inspired by SoulBound Tokens.
-                </p>
-              </div>
-              <button className="home-learn2 button">
-                <span className="home-text08">Learn more</span>
-                <img
-                  alt="image"
-                  src="/Icons/arrow-2.svg"
-                  className="home-image03"
-                />
-              </button>
-            </div>
-          </div>
-        </div>
-        <div className="home-card02">
-          <div className="home-avatar4">
-            <img
-              alt="image"
-              src="/Avatars/light-avatar.svg"
-              className="home-avatar5"
-            />
-          </div>
-          <div className="home-row1">
-            <div className="home-main2">
-              <div className="home-content03">
-                <h2 className="home-header03">
-                  Dive Deep into the world of Blockchain
-                </h2>
-                <p className="home-description04">
-                  Learn about Rollup mechanism, Layer protocols in Blockchain,
-                  Multi batch and bulk transaction processing and many more
-                  research things.
-                </p>
-              </div>
-              <button className="home-learn3 button">
-                <span className="home-text09">Learn more</span>
-                <img
-                  alt="image"
-                  src="/Icons/arrow-2.svg"
-                  className="home-image04"
-                />
-              </button>
-            </div>
-            <img alt="image" src="/group%202262.svg" className="home-image05" />
-          </div>
-        </div>
-      </section>
-
+      
       <footer className="home-footer">
         <div className="home-main5">
           <div className="home-branding">

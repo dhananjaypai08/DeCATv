@@ -160,7 +160,7 @@ const Home = (props) => {
         </div>
         <div data-thq="thq-navbar-btn-group" className="home-btn-group">
           
-          <button onClick={checkConnectionBeforeConnecting} className="button">
+          <button onClick={checkConnectionBeforeConnecting} className="button wallet-btn">
             {connectmsg}
           </button>
         </div>
@@ -213,33 +213,39 @@ const Home = (props) => {
           </div>
         </div>
       </header>
-      
-      {isConnected && <label className='home-button7 button'>Total DeCAT Minting Volumne: {totalmints}
+      <div className="EmptySpace">
+
+      </div>
+      {isConnected && <label className='mint-btn'>Total DeCAT's Minting Volume: {totalmints}
       </label>}<br></br>
-      {isConnected && <label className='home-button7 button'>Total DeCAT Endorsed Volume: {total_endorsements}</label>}<br></br>
+      {isConnected && <label className='mint-btn'>Total DeCAT's Endorsed Volume: {total_endorsements}</label>}<br></br>
       {isConnected && admin && <Loginsystem></Loginsystem>}
       <section className="home-hero">
-        <div className="home-heading">
-          <h1 className="home-header">Empowering Identity Verification in the Job Market</h1>
+      {!isConnected && <div className="home-heading">
+          <h1 className="home-header">Certify. Endorse. Succeed.</h1>
           <p className="home-caption">
-          EIP5192-Compatible Decentralized Certification Authority and Reputation System
+          Decentralized Certification and Reputation System.
           </p>
-        </div>
+        </div>}
         <div className="home-buttons">
-          <button onClick={checkConnectionBeforeConnecting} className="button">
+          {/* <button onClick={checkConnectionBeforeConnecting} className="button">
             {connectmsg}
-          </button>
-          <button className="home-learn button-clean button">Learn more</button>
+          </button> */}
+          
         </div>
       </section>
       <section className="home-description">
       {isConnected && <div className="home-hero">
+      <p className="caption">
+          Your DeCAT Profile:
+          </p>
       <label className='home-button7 button'>Total DeCAT Endorsements allowed: {endorsementsAllowed}
       </label>
       </div>}
-      <div className="home-container">
+      {isConnected && <div className="home-container">
        <label className='home-button7 button'>DeCAT SBT's minted to your account
-      </label>
+        </label>
+        
         <ul>{fetched_nftdata && 
         nft_data.map((nft, index) => (
         <>
@@ -254,9 +260,9 @@ const Home = (props) => {
           </>
         ))}
         </ul>
-    </div>
+    </div>}
     
-    <div className="home-container">
+    {isConnected && <div className="home-container">
       <label className='home-button7 button'>DeCAT SBT's endorsed to your account
       </label>
         <ul>{fetched_nftdata && 
@@ -272,7 +278,7 @@ const Home = (props) => {
           </>
         ))}
         </ul>
-    </div>
+    </div>}
         <img
           alt="image"
           src="/hero-divider-1500w.png"
@@ -280,7 +286,7 @@ const Home = (props) => {
         />
         
       </section>
-      <section className="home-cards">
+      {!isConnected && <section className="home-cards">
         <div className="home-row">
           <div className="home-card">
             
@@ -321,10 +327,9 @@ const Home = (props) => {
             </div>
           </div>
         </div>
+               
         
-         
-        
-      </section>
+      </section>}
 
       <footer className="home-footer">
         <div className="home-main5">

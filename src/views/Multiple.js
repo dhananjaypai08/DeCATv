@@ -215,23 +215,8 @@ const Multiple = () => {
               </nav>
             </div>
             <div data-thq="thq-navbar-btn-group" className="home-btn-group">
-              <div className="home-socials">
-                <button className="social button">
-                  <img
-                    alt="image"
-                    src="/Icons/twitter.svg"
-                    className="home-image"
-                  />
-                </button>
-                <button className="social button">
-                  <img
-                    alt="image"
-                    src="/Icons/discord.svg"
-                    className="home-image01"
-                  />
-                </button>
-              </div>
-              <button onClick={checkConnectionBeforeConnecting} className="button">
+              
+              <button onClick={checkConnectionBeforeConnecting} className="button wallet-btn">
                 {connectmsg}
               </button>
               
@@ -308,13 +293,17 @@ const Multiple = () => {
     </div>
     }
   {authorized !== 1 &&
+    
+
     <form onSubmit={SignIn}>
-      <label className='home-links' style={{color: "white"}}>Wallet Address</label>
+      
+      <div className='EmptySpace'><label className='title-head' style={{color: "white"}}>Wallet Address   </label>
       <input type="url" id="walletaddress" value={account ? account: ""} disabled style={{width: 300}} className="button"></input>
       <br></br><br></br>
-      <label className='home-links' style={{color: "white"}}>Enter Password</label>
-      <input type="password" id="password" placeholder="Enter Your Password" className='home-button7 button'></input>
-
+      
+        <label className='title-head' style={{color: "white"}}>Enter Password</label>
+      <input type="password" id="password" placeholder="Enter Your Password" style={{width: 300}} className='home-button7 button'></input>
+      </div>
       <button type="submit" className='home-button6 button'>Login</button>
    </form>
   }
@@ -340,257 +329,126 @@ const Multiple = () => {
              
             </form>
           }
-          <section className="home-hero">
-            <div className="home-heading">
-              <h1 className="home-header">Leveraging Modified Soul Bound Tokens</h1>
-              <p className="home-caption">
-                Decentralized Certificate Authority - A Non Fungible Token based
-                Dapp for Certificate Authorization
-              </p>
-            </div>
-            <div className="home-buttons">
-              {/* <button onClick={!isConnected && connectWallet} className="button">
-                {connectmsg}
-              </button> */}
-              <button className="home-learn button-clean button">Learn more</button>
-            </div>
-          </section>
+          
           <section className="home-description">
+            <div className='EmptySpace'></div>
+            {!isConnected && <h1 className="home-header">Please connect Wallet.</h1>}
             <img
               alt="image"
               src="/hero-divider-1500w.png"
               className="home-divider-image"
             />
-            <div className="home-container3">
-              <div className="home-description01">
-                <div className="home-content">
-                  <p className="home-paragraph">
-                    We are a team of web3 enthusiasts passionate about building
-                    Systems that would not only revolutionize the world But also
-                    shape the world into a better future.
-                  </p>
-                  <p className="home-paragraph1">
-                    DeCAT is set to release on public blockchain Layer2. The first
-                    working model is set to be deployed on Polygon mumbai testnet.
-                    Why Polygon? Provides scalability enabling rollup mechanism
-                    which plays a critical role in multibatch transactions.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </section>
-          <section className="home-cards">
-            <div className="home-row">
-              <div className="home-card">
-                <div className="home-avatar">
-                  <img
-                    alt="image"
-                    src="/Avatars/avatar.svg"
-                    className="home-avatar1"
-                  />
-                </div>
-                <div className="home-main">
-                  <div className="home-content01">
-                    <h2 className="home-header01">
-                      70% of the Certificates are web2 based or paper based
-                    </h2>
-                    <p className="home-description02">
-                      The project aims to tackle the problem of secure credential
-                      verification using SoulBound NFTs in a decentralized manner.
-                      By creating a Dapp with features for issuers to mint, manage,
-                      and verify NFTs, we intend to revolutionize how certificates
-                      and achievements are showcased and verified, enhancing their
-                      value and authenticity in the digital world.
-                    </p>
-                  </div>
-                  <button className="home-learn1 button">
-                    <span className="home-text07">Learn more</span>
-                    <img
-                      alt="image"
-                      src="/Icons/arrow.svg"
-                      className="home-image02"
-                    />
-                  </button>
-                </div>
-              </div>
-              <div className="home-card01">
-                <div className="home-avatar2">
-                  <img
-                    alt="image"
-                    src="/Avatars/default-avatar.svg"
-                    className="home-avatar3"
-                  />
-                </div>
-                <div className="home-main1">
-                  <div className="home-content02">
-                    <h2 className="home-header02">
-                      DeCAT : provides digital and decentralized certification
-                      authority
-                    </h2>
-                    <p className="home-description03">
-                      ensuring the authenticity and uniqueness of certificates,
-                      achievements, and credentials has become a critical concern.
-                      Traditional methods are susceptible to duplication and
-                      tampering, diminishing the value of these accolades. To
-                      address this issue, we aim to create a decentralized
-                      application (Dapp) that leverages modified ERC721 tokens
-                      inspired by SoulBound Tokens.
-                    </p>
-                  </div>
-                  <button className="home-learn2 button">
-                    <span className="home-text08">Learn more</span>
-                    <img
-                      alt="image"
-                      src="/Icons/arrow-2.svg"
-                      className="home-image03"
-                    />
-                  </button>
-                </div>
-              </div>
-            </div>
-            <div className="home-card02">
-              <div className="home-avatar4">
-                <img
-                  alt="image"
-                  src="/Avatars/light-avatar.svg"
-                  className="home-avatar5"
-                />
-              </div>
-              <div className="home-row1">
-                <div className="home-main2">
-                  <div className="home-content03">
-                    <h2 className="home-header03">
-                      Dive Deep into the world of Blockchain
-                    </h2>
-                    <p className="home-description04">
-                      Learn about Rollup mechanism, Layer protocols in Blockchain,
-                      Multi batch and bulk transaction processing and many more
-                      research things.
-                    </p>
-                  </div>
-                  <button className="home-learn3 button">
-                    <span className="home-text09">Learn more</span>
-                    <img
-                      alt="image"
-                      src="/Icons/arrow-2.svg"
-                      className="home-image04"
-                    />
-                  </button>
-                </div>
-                <img alt="image" src="/group%202262.svg" className="home-image05" />
-              </div>
-            </div>
+            
           </section>
     
           <footer className="home-footer">
-            <div className="home-main5">
-              <div className="home-branding">
-                <div className="home-heading10">
-                  <h2 className="home-logo2">Character</h2>
-                  <p className="home-caption17">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                    eiusmod tempor incididunt ut labore et dolore.
-                  </p>
-                </div>
-                <div className="home-socials1">
-                  <a
-                    href="https://twitter.com"
-                    target="_blank"
-                    rel="noreferrer noopener"
-                    className="home-twitter1 social button"
-                  >
-                    <img
-                      alt="image"
-                      src="/Icons/twitter.svg"
-                      className="home-image32"
-                    />
-                  </a>
-                  <a
-                    href="https://discord.com"
-                    target="_blank"
-                    rel="noreferrer noopener"
-                    className="home-discord1 social button"
-                  >
-                    <img
-                      alt="image"
-                      src="/Icons/discord.svg"
-                      className="home-image33"
-                    />
-                  </a>
-                </div>
-              </div>
-              <div className="home-links1">
-                <div className="home-list1">
-                  <h3 className="home-heading11">Site</h3>
-                  <div className="home-items">
-                    <button className="home-link02 button-clean button">
-                      About
-                    </button>
-                    <button className="home-link03 button-clean button">
-                      Collection
-                    </button>
-                    <button className="home-link04 button-clean button">
-                      Roadmap
-                    </button>
-                    <button className="home-link05 button-clean button">
-                      Features
-                    </button>
-                  </div>
-                </div>
-                <div className="home-list2">
-                  <h3 className="home-heading12">Company</h3>
-                  <div className="home-items1">
-                    <button className="home-link06 button-clean button">
-                      Team
-                    </button>
-                    <button className="home-link07 button-clean button">
-                      Press
-                    </button>
-                    <button className="home-link08 button-clean button">
-                      Terms
-                    </button>
-                    <button className="home-link09 button-clean button">
-                      Limitations
-                    </button>
-                    <button className="home-link10 button-clean button">
-                      Licenses
-                    </button>
-                  </div>
-                </div>
-              </div>
-              <div className="home-socials2">
-                <a
-                  href="https://twitter.com"
-                  target="_blank"
-                  rel="noreferrer noopener"
-                  className="home-twitter2 social button"
-                >
-                  <img
-                    alt="image"
-                    src="/Icons/twitter.svg"
-                    className="home-image34"
-                  />
-                </a>
-                <a
-                  href="https://discord.com"
-                  target="_blank"
-                  rel="noreferrer noopener"
-                  className="home-discord2 social button"
-                >
-                  <img
-                    alt="image"
-                    src="/Icons/discord.svg"
-                    className="home-image35"
-                  />
-                </a>
+        <div className="home-main5">
+          <div className="home-branding">
+            <div className="home-heading10">
+              <h2 className="home-logo2">ZKBuilders</h2>
+              <p className="home-caption17">
+              Empower your professional journey with Decat. Join us in creating a job market where trust is inherent, and your identity is truly yours. Let's build a decentralized future together.
+              </p>
+            </div>
+            <div className="home-socials1">
+              <a
+                href="https://twitter.com"
+                target="_blank"
+                rel="noreferrer noopener"
+                className="home-twitter1 social button"
+              >
+                <img
+                  alt="image"
+                  src="/Icons/twitter.svg"
+                  className="home-image32"
+                />
+              </a>
+              <a
+                href="https://discord.com"
+                target="_blank"
+                rel="noreferrer noopener"
+                className="home-discord1 social button"
+              >
+                <img
+                  alt="image"
+                  src="/Icons/discord.svg"
+                  className="home-image33"
+                />
+              </a>
+            </div>
+          </div>
+          <div className="home-links1">
+            <div className="home-list1">
+              <h3 className="home-heading11">Site</h3>
+              <div className="home-items">
+                <button className="home-link02 button-clean button">
+                  About
+                </button>
+                <button className="home-link03 button-clean button">
+                  Collection
+                </button>
+                <button className="home-link04 button-clean button">
+                  Roadmap
+                </button>
+                <button className="home-link05 button-clean button">
+                  Features
+                </button>
               </div>
             </div>
-            <span className="home-copyright">
-              © 2022 Character. All Rights Reserved.
-            </span>
-          </footer>
+            <div className="home-list2">
+              <h3 className="home-heading12">Company</h3>
+              <div className="home-items1">
+                <button className="home-link06 button-clean button">
+                  Team
+                </button>
+                <button className="home-link07 button-clean button">
+                  Press
+                </button>
+                <button className="home-link08 button-clean button">
+                  Terms
+                </button>
+                <button className="home-link09 button-clean button">
+                  Limitations
+                </button>
+                <button className="home-link10 button-clean button">
+                  Licenses
+                </button>
+              </div>
+            </div>
+          </div>
+          <div className="home-socials2">
+            <a
+              href="https://twitter.com"
+              target="_blank"
+              rel="noreferrer noopener"
+              className="home-twitter2 social button"
+            >
+              <img
+                alt="image"
+                src="/Icons/twitter.svg"
+                className="home-image34"
+              />
+            </a>
+            <a
+              href="https://discord.com"
+              target="_blank"
+              rel="noreferrer noopener"
+              className="home-discord2 social button"
+            >
+              <img
+                alt="image"
+                src="/Icons/discord.svg"
+                className="home-image35"
+              />
+            </a>
+          </div>
         </div>
-      );</div>
+        <span className="home-copyright">
+          © 2023 Character. All Rights Reserved.
+        </span>
+      </footer>
+        </div>
+      ;</div>
       
     </div>
     )
