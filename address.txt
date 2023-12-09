@@ -1,9 +1,25 @@
 Sepolia:
-SBT - 0x0Ffe7FB2b553e8553E65C90860f651eD76bBF3eb
 DeCAt - 0x61eFE56495356973B350508f793A50B7529FF978
+SBT(old) - 0x0Ffe7FB2b553e8553E65C90860f651eD76bBF3eb
 
 Polygon mumbai 
-DeCAt - 0x472E343Dcd0917FD68Fae9300bEa02ED2D1ecebE
+DeCat - 0x472E343Dcd0917FD68Fae9300bEa02ED2D1ecebE
+
 
 Scroll
-SBT previous right address - 0x798dEd76b55aC40bDBc607BE0038Becf7074A26B
+DeCat - 
+npx hardhat run --network scrollSepolia ./src/scripts/deploy.js
+npx hardhat verify --network scrollSepolia <address>
+SBT(old) - 0x798dEd76b55aC40bDBc607BE0038Becf7074A26B
+
+
+Celo
+
+DeCat- 0x9816146ec5f29Bb8de6CCFCd2fD5AA10b75E82bA
+DeCat Verify: https://alfajores.celoscan.io/address/0x9816146ec5f29Bb8de6CCFCd2fD5AA10b75E82bA#code
+SBT(old) - 0x6674256E7461518B5Be7F2FB43029132d9385385 
+
+
+Arbitrum
+
+DeCat - 0x9816146ec5f29Bb8de6CCFCd2fD5AA10b75E82bA

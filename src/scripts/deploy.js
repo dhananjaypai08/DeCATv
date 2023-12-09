@@ -1,8 +1,8 @@
 const hre = require("hardhat");
 
 async function main() {
-  const sbt = await hre.ethers.getContractFactory("SBT");
-  const contract = await sbt.deploy(); //instance of contract
+  const dcat = await hre.ethers.getContractFactory("DeCAT");
+  const contract = await dcat.deploy(); //instance of contract
 
   await contract.deployed();
   console.log("Address of contract:", contract.address);
