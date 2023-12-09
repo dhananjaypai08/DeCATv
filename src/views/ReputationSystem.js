@@ -28,7 +28,7 @@ const ReputationSystem = (props) => {
   const [curr_reputation, setCurReputation] = useState(0);
 
   const nftipfsAddress = "https://gateway.lighthouse.storage/ipfs/";
-  const randomColor = () => `rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, 0.2)`;
+  const randomColor = () => `rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, 0.8)`;
 
   const checkConnectionBeforeConnecting = () => {
     if(!isConnected){
