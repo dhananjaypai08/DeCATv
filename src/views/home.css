@@ -2572,22 +2572,23 @@
   border-spacing: 0;
   width: 100%;
   border: 1px solid black;
-  border-radius: 10px; /* Set the border-radius for rounded corners */
+  border-radius: 20px; /* Set the border-radius for rounded corners */
   overflow: hidden;
-  background-color: white;
+  background-color: rgb(21, 21, 21);
 }
 
 .leaderboard-table th,
 .leaderboard-table td {
-  border: 1px solid #e0e9ff;
+  border: 1px solid #363636;
   padding: 15px;
-  text-align: left;
-  color: #061334;
+  text-align: center;
+  color: #ffffff;
+  width: 250px;
 }
 
 th{
-  background-color: #ffffff;
-  color: black;
+  background-color: rgb(29, 28, 28);
+  color: rgb(29, 28, 28);
   height: 5rem;
   font-family: "Rubik", sans-serif;
   font-size: 1.4rem;
@@ -2599,14 +2600,34 @@ tr{
   color: #fffefe;
   font-family: sans-serif;
   transition: all 0.2s ease-in-out;
-  border-radius: 0.2rem;
+  border-radius: 0.5rem;
 }
 
 tr:hover {
-  background-color: #fadf57;
+  background-color: #facf41;
   transform: scale(1.05);
   color: #f2f2f2;
-  -webkit-box-shadow: 0px 5px 15px 8px #e4e7fb;
-  box-shadow: 0px 5px 15px 8px #e4e7fb;
 }
 
+.leaderboard-table td:hover {
+  color: black;
+}
+.leaderboard-table td.score:hover {
+  color: black;
+}
+
+td{
+  font-family: "Rubik", sans-serif;
+  font-size: 1.1rem;
+  padding: 5px;
+  width: fit-content;
+}
+
+.leaderboard-table th:nth-child(1),
+.leaderboard-table td:nth-child(1) {
+  width: 100px;
+}
+.leaderboard-table th:nth-child(3),
+.leaderboard-table td:nth-child(3) {
+  width: 150px;
+}

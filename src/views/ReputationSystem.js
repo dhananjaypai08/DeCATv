@@ -266,6 +266,7 @@ const ReputationSystem = (props) => {
       <table className="leaderboard-table">
       <thead>
       <tr>
+        <th></th>
         <th>Account</th>
         <th>Score</th>
       </tr>
@@ -274,6 +275,7 @@ const ReputationSystem = (props) => {
 
      {leaderboardData.map((data, index) => (
         <tr key={index}>
+          <td>{index + 1}</td> {/* Display row numbers starting from 1 */}
           <td>{data.account}</td>
           <td>{data.score}</td>
         </tr>
