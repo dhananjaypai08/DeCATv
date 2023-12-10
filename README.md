@@ -17,10 +17,10 @@ DeCAT operates on the secure blockchain, functioning like an on-chain LinkedIn.
   - Our platform safeguards verified skills and fosters a competitive environment for ongoing skill development.
 
 ## How it works
-    - Organization can send ERC5192 compatible tokens to peers wallet address
-    - whitelisted Organization's can perform single mint by adding metadata or Bulk minting which supports multi batch transaction by just importing a .csv file.
-    - Users who hold the DeCAT, also access the reputation score so as to attain visibility and helps give an edge in the job market.
-    - Hiring managers can view the portfolio of individual users by entering the wallet address or just look at the reputation score of every account that has DeCAT in their account and gain a deeper insight on that particular user
+  - Organization can send ERC5192 compatible tokens to peers wallet address
+  - whitelisted Organization's can perform single mint by adding metadata or Bulk minting which supports multi batch transaction by just importing a .csv file.
+  - Users who hold the DeCAT, also access the reputation score so as to attain visibility and helps give an edge in the job market.
+  - Hiring managers can view the portfolio of individual users by entering the wallet address or just look at the reputation score of every account that has DeCAT in their account and gain a deeper insight on that particular user
 
 # DeCAT Contract Addresses
 
