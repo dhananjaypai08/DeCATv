@@ -7,9 +7,9 @@ import './home.css'
 import Script from "dangerous-html/react";
 import { Helmet } from "react-helmet";
 import { useAppContext } from '../AppContext';
-import { create as ipfsHttpClient } from "ipfs-http-client";
+// import { create as ipfsHttpClient } from "ipfs-http-client";
 import Papa from 'papaparse';
-import abi from "../contracts/decat.json";
+import abi from "../contracts/Autocrate.json";
 import lighthouse from '@lighthouse-web3/sdk';
 
 const projectId = '2WCbZ8YpmuPxUtM6PzbFOfY5k4B';
@@ -71,12 +71,12 @@ const Multiple = () => {
       }
     }
 
-    const ipfs = ipfsHttpClient({
-        url: "https://ipfs.infura.io:5001/api/v0",
-        headers: {
-          authorization,
-        },
-    });
+    // const ipfs = ipfsHttpClient({
+    //     url: "https://ipfs.infura.io:5001/api/v0",
+    //     headers: {
+    //       authorization,
+    //     },
+    // });
 
     const call = async() => {
         const contractwithsigner = contract.connect(signer)
@@ -84,7 +84,7 @@ const Multiple = () => {
         console.log(resp)
     } 
     const connectWallet = async () => {
-      const contractAddress = "0x61eFE56495356973B350508f793A50B7529FF978";//"0xe8750E54151a8eA203ef65e0fB11230676b9b033";
+      const contractAddress = "0x681a204B065604B2b2611D0916Dca94b992f0B41"//"0x816df2a69bB2D246B1ee5a4F2d1B3EbcB3aF7C85";//"0x61eFE56495356973B350508f793A50B7529FF978";
       const contractAbi = abi.abi;
       try {
         const { ethereum } = window;
@@ -142,7 +142,7 @@ const Multiple = () => {
 
     const SendSBT = async(event) => {
         event.preventDefault();
-        let tokenuris = []
+        let tokenuris = [];
         const image = file;
         console.log('uploading...');
         // const result = await ipfs.add(image);
@@ -164,7 +164,7 @@ const Multiple = () => {
         console.log(addressArray, tokenuris);
         const contractwithsigner = contract.connect(signer);
         console.log('connected with contract');
-        const resp = await contractwithsigner.mintBatch(addressArray, tokenuris);
+        const resp = await contractwithsigner.mintBatch(addressArray, nameArray, descriptionArray, result.data.Hash, tokenuris);
         console.log(resp);
         setLoader(true);
         event.target.reset();
@@ -186,12 +186,12 @@ const Multiple = () => {
     <div>
         <div className="home-container">
           <Helmet>
-            <title>DeCAT</title>
+            <title>Autocrate</title>
             <meta property="og:title" content="Dashboard" />
           </Helmet>
           <header data-thq="thq-navbar" className="home-navbar">
           <span className="home-logo"><a  href="/">
-              DeCAT
+              Autocrate
             </a></span>
             <div
               data-thq="thq-navbar-nav"
@@ -236,7 +236,7 @@ const Multiple = () => {
                 className="home-nav1"
               >
                 <div className="home-container1">
-                  <span className="home-logo1">DeCAT</span>
+                  <span className="home-logo1">Autocrate</span>
                   <div data-thq="thq-close-menu" className="home-menu-close">
                     <svg viewBox="0 0 1024 1024" className="home-icon02">
                       <path d="M810 274l-238 238 238 238-60 60-238-238-238 238-60-60 238-238-238-238 60-60 238 238 238-238z"></path>
@@ -347,7 +347,7 @@ const Multiple = () => {
             <div className="home-heading10">
               <h2 className="home-logo2">ZKBuilders</h2>
               <p className="home-caption17">
-              Empower your professional journey with Decat. Join us in creating a job market where trust is inherent, and your identity is truly yours. Let's build a decentralized future together.
+              Empower your professional journey with Autocrate. Join us in creating a job market where trust is inherent, and your identity is truly yours. Let's build a decentralized future together.
               </p>
             </div>
             <div className="home-socials1">

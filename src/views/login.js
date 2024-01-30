@@ -37,7 +37,7 @@ const Loginsystem = () => {
     {authorized == 1 && 
     // <div data-thq="thq-close-menu" className="home-caption01">Wohooo!! You are Logged In
     // </div> && 
-    <Redirect to="/decat" />
+    <Redirect to="/autocrate" />
     }
 
     {authorized == 2 && 

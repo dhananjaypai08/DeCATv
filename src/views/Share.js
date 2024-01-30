@@ -7,7 +7,7 @@ import { Redirect } from 'react-router-dom'
 import { useAppContext } from '../AppContext'
 import './home.css'
 
-const Endorse = (props) => {
+const Share = (props) => {
     
     const { state, setState } = useAppContext()
     // const { provider, signer, contract, account, authenticated } = state;
@@ -17,17 +17,20 @@ const Endorse = (props) => {
         event.preventDefault();
         const {contract} = state;
         const {signer} = state;
+        const {account} = state;
         const walletAddress = document.querySelector('#endorseaddress').value;
         const contractwithsigner = contract.connect(signer);
+        const imageuri = props.data.image.split('/').pop();
+        console.log(walletAddress, props.data.name, props.data.description, imageuri, props.passedValue);
         try{
-            const resp = await contractwithsigner.endorseMint(walletAddress, props.passedValue);
+            const resp = await contractwithsigner.shareMint(walletAddress, props.data.name, props.data.description, imageuri, props.passedValue);
             event.target.reset()
             setLoader(true);
             const receipt = await resp.wait();
             if(receipt.status == 1){
                 setLoader(false);
                 setEndorsement(true);
-                alert("Your Sould Bound Token has been minted");
+                alert("Your Sould Bound Token has been shared");
             } else{
                 setEndorsement(false);
                 alert("Your Soul Bound Token has not been minted. Please try again");
@@ -42,7 +45,7 @@ const Endorse = (props) => {
 
     return (<div>
     {endorsed && 
-    <div data-thq="thq-close-menu" className="home-caption01">SBT has been endorsed
+    <div data-thq="thq-close-menu" className="home-caption01">SBT has been shared
     </div>  
     }
 
@@ -50,11 +53,11 @@ const Endorse = (props) => {
          <label className='home-links' style={{color: "white"}}>Wallet Address</label>
          <input type="text" id="endorseaddress" style={{width: 300}} className="button"></input>
          <br></br><br></br>
-         <button type="submit" className='home-button6 button'>Endorse</button>
+         <button type="submit" className='home-button6 button'>Share</button>
         
      </form>
-     {loader && <div><label className='home-links' style={{color: "white"}}>Endorsing SBT...</label><div className="loader"></div></div>}
+     {loader && <div><label className='home-links' style={{color: "white"}}>Sharing SBT...</label><div className="loader"></div></div>}
     </div>
     )
 }
-export default Endorse;
+export default Share;

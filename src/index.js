@@ -4,10 +4,10 @@ import { BrowserRouter as Router, Route } from 'react-router-dom'
 
 import './style.css'
 import Home from './views/home'
-import DeCAT from './views/DeCAT'
+import Autocrate from './views/Autocrate'
 import Verify from './views/Verify'
 import Portfolio from './views/Portfolio'
-import Endorsement from './views/Endorsement'
+import Sharing from './views/Sharing'
 import { AppProvider } from './AppContext'
 import Multiple from './views/Multiple'
 import ReputationSystem from './views/ReputationSystem'
@@ -18,10 +18,10 @@ const App = () => {
       <AppProvider>
       <div>
         <Route component={Home} exact path="/" />
-        <Route component={DeCAT} exact path="/decat" />
+        <Route component={Autocrate} exact path="/autocrate" />
         <Route component={Verify} exact path="/verify" />
         <Route component={Portfolio} exact path="/portfolio" />
-        <Route component={Endorsement} exact path="/endorsement" />
+        <Route component={Sharing} exact path="/sharing" />
         <Route component={Multiple} exact path="/multiple" />
         <Route component={ReputationSystem} exact path="/reputation" />
       </div>

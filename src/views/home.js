@@ -4,14 +4,14 @@ import Script from "dangerous-html/react";
 import { Helmet } from "react-helmet";
 import { useState, useEffect } from "react";
 import { Redirect } from 'react-router-dom'
-import abi from "../contracts/decat.json";
+import abi from "../contracts/Autocrate.json";
 //import './App.css';
 import { ethers } from "ethers";
 import axios from "axios";
 
 import "./home.css";
 import Loginsystem from "./login";
-import Endorse from "./Endorse";
+import Share from "./Share";
 import { useAppContext } from "../AppContext";
 
 const Home = (props) => {
@@ -30,6 +30,7 @@ const Home = (props) => {
   const [ipfs_hash, setHash] = useState();
   const [endorsementsAllowed, setEndorsementsAllowed] = useState(0);
   const [admin, setAdmin] = useState(false);
+  const [selectedData, setSelectedData] = useState();
 
   const nftipfsAddress = "https://gateway.lighthouse.storage/ipfs/";
 
@@ -40,7 +41,7 @@ const Home = (props) => {
   }
   
   const connectWallet = async () => {
-    const contractAddress = "0x61eFE56495356973B350508f793A50B7529FF978";//"0x798dEd76b55aC40bDBc607BE0038Becf7074A26B"; 0x472E343Dcd0917FD68Fae9300bEa02ED2D1ecebE; 
+    const contractAddress = "0x681a204B065604B2b2611D0916Dca94b992f0B41"//"0x816df2a69bB2D246B1ee5a4F2d1B3EbcB3aF7C85";//"0x61eFE56495356973B350508f793A50B7529FF978"
     const contractAbi = abi.abi;
     try {
       const { ethereum } = window;
@@ -80,36 +81,40 @@ const Home = (props) => {
         const endorsements_total = await contractwithsigner.total_endorsements();
         setTotalEndorsements(endorsements_total.toNumber());
         const nfts = await contractwithsigner.getTokenIdAccount(account);
+        console.log('all nfts fetched');
         let nft_datas = [];
         let ipfs_cids = [];
         for(var i=0;i<nfts.length;i++){
-          const tokenId = nfts[i].toNumber();
+          const tokenId = nfts[i].tokenId.toNumber();
           const ipfs_cid = await contractwithsigner.tokenURI(tokenId);
           console.log(ipfs_cid)
-          await axios.get(nftipfsAddress+ipfs_cid).then((metadata) => {
-            ipfs_cids.push(ipfs_cid);
-            nft_datas.push(metadata.data);
-          });
+          ipfs_cids.push(ipfs_cid);
+          nft_datas.push({"name": nfts[i].name, "description": nfts[i].description, "image": nftipfsAddress+nfts[i].imageuri})
+          // await axios.get(nftipfsAddress+ipfs_cid).then((metadata) => {
+          //   ipfs_cids.push(ipfs_cid);
+          //   nft_datas.push(metadata.data);
+          // });
         }
         console.log(nft_datas);
-        const endorsed_nfts = await contractwithsigner.getTokenIdAccountEndorsing(account);
+        const endorsed_nfts = await contractwithsigner.getTokenIdAccountSharing(account);
         let endorsed = [];
         let endorsed_ipfs = [];
         for(var i=0;i<endorsed_nfts.length;i++){
-          const tokenId = endorsed_nfts[i].toNumber();
+          const tokenId = endorsed_nfts[i].tokenId.toNumber();
           const ipfs_endorsed = await contractwithsigner.tokenURI(tokenId);
-          console.log(ipfs_endorsed);
-          await axios.get(nftipfsAddress+ipfs_endorsed).then((metadata) => {
-            endorsed_ipfs.push(ipfs_endorsed);
-            endorsed.push(metadata.data);
-          });
+          endorsed_ipfs.push(ipfs_endorsed);
+          endorsed.push({"name": endorsed_nfts[i].name, "description": endorsed_nfts[i].description, "image": nftipfsAddress+endorsed_nfts[i].imageuri})
+          // await axios.get(nftipfsAddress+ipfs_endorsed).then((metadata) => {
+          //   endorsed_ipfs.push(ipfs_endorsed);
+          //   endorsed.push(metadata.data);
+          // });
         }
         setNFT(true);
         setNftCID(ipfs_cids);
         setNFTData(nft_datas);
         setEndorsingData(endorsed);
         setEndorsedCid(endorsed_ipfs);
-        const response = await contractwithsigner.GetEndorsementsAllowed(account);
+        const response = await contractwithsigner.GetSharingAllowed(account);
         const endorsements_allowed = response.toNumber();
         setEndorsementsAllowed(endorsements_allowed);
       }
@@ -121,7 +126,10 @@ const Home = (props) => {
   const handleButtonClick = (index) => {
     if(endorsementsAllowed<1){
       alert("You are not allowed to make any endorsements");
-    }else{setHash(get_nft_cids[index]);}
+    }else{
+      setHash(get_nft_cids[index]);
+      setSelectedData(nft_data[index]);
+    }
   };
 
   return (
@@ -133,7 +141,7 @@ const Home = (props) => {
       </Helmet>
       <header data-thq="thq-navbar" className="home-navbar">
         <span className="home-logo"><a  href="/">
-              DeCAT
+              Autocrate
             </a></span>
         <div
           data-thq="thq-navbar-nav"
@@ -178,7 +186,7 @@ const Home = (props) => {
             className="home-nav1"
           >
             <div className="home-container1">
-              <span className="home-logo1">DeCAT</span>
+              <span className="home-logo1">Autocrate</span>
               <div data-thq="thq-close-menu" className="home-menu-close">
                 <svg viewBox="0 0 1024 1024" className="home-icon02">
                   <path d="M810 274l-238 238 238 238-60 60-238-238-238 238-60-60 238-238-238-238 60-60 238 238 238-238z"></path>
@@ -216,15 +224,15 @@ const Home = (props) => {
       <div className="EmptySpace">
 
       </div>
-      {isConnected && <label className='mint-btn'>Total DeCAT's Minting Volume: {totalmints}
+      {isConnected && <label className='mint-btn'>Total Autocrate's Minting Volume: {totalmints}
       </label>}<br></br>
-      {isConnected && <label className='mint-btn'>Total DeCAT's Endorsed Volume: {total_endorsements}</label>}<br></br>
+      {isConnected && <label className='mint-btn'>Total Autocrate's Shared Volume: {total_endorsements}</label>}<br></br>
       {isConnected && admin && <Loginsystem></Loginsystem>}
       <section className="home-hero">
       {!isConnected && <div className="home-heading">
-          <h1 className="home-header">Certify. Endorse. Succeed.</h1>
+          <h1 className="home-header">Store. Share. Succeed</h1>
           <p className="home-caption">
-          Decentralized Certification and Reputation System.
+          Decentralized Identity Verification and storage system.
           </p>
         </div>}
         <div className="home-buttons">
@@ -237,13 +245,13 @@ const Home = (props) => {
       <section className="home-description">
       {isConnected && <div className="home-hero">
       <p className="caption">
-          Your DeCAT Profile:
+          Your Autocrate Profile:
           </p>
-      <label className='home-button7 button'>Total DeCAT Endorsements allowed: {endorsementsAllowed}
+      <label className='home-button7 button'>Total Autocrate Sharings allowed: {endorsementsAllowed}
       </label>
       </div>}
       {isConnected && <div className="home-container">
-       <label className='home-button7 button'>DeCAT SBT's minted to your account
+       <label className='home-button7 button'>Autocrate SBT's minted to your account
         </label>
         
         <ul>{fetched_nftdata && 
@@ -254,8 +262,8 @@ const Home = (props) => {
           <img src={nft.image} className="home-image06" ></img>
           </li>
           <br></br>
-          {ipfs_hash !== get_nft_cids[index] && <button className='home-button6 button' onClick={() => handleButtonClick(index)}>Endorse</button>}
-          {ipfs_hash == get_nft_cids[index] && <Endorse passedValue={ipfs_hash}></Endorse>}
+          {ipfs_hash !== get_nft_cids[index] && <button className='home-button6 button' onClick={() => handleButtonClick(index)}>Share</button>}
+          {ipfs_hash == get_nft_cids[index] && <Share passedValue={ipfs_hash} data={selectedData}></Share>}
           </div>
           </>
         ))}
@@ -263,7 +271,7 @@ const Home = (props) => {
     </div>}
     
     {isConnected && <div className="home-container">
-      <label className='home-button7 button'>DeCAT SBT's endorsed to your account
+      <label className='home-button7 button'>Autocrate SBT's shared to your account
       </label>
         <ul>{fetched_nftdata && 
         endorsed_mints.map((nft, index) => (
@@ -311,8 +319,7 @@ const Home = (props) => {
             <div className="home-main1">
               <div className="home-content02">
                 <h2 className="home-header02">
-                  DeCAT : Digital and Decentralized Certification
-                  Authority
+                  Autocrate: Decentralized Identity verification and storage system
                 </h2>
                 <p className="home-description03">
                   Ensuring the authenticity and uniqueness of certificates,
@@ -337,7 +344,7 @@ const Home = (props) => {
             <div className="home-heading10">
               <h2 className="home-logo2">ZKBuilders</h2>
               <p className="home-caption17">
-              Empower your professional journey with Decat. Join us in creating a job market where trust is inherent, and your identity is truly yours. Let's build a decentralized future together.
+              Empower your professional journey with Autocrate. Join us in creating a job market where trust is inherent, and your identity is truly yours. Let's build a decentralized future together.
               </p>
             </div>
             <div className="home-socials1">

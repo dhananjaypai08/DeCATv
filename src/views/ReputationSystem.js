@@ -3,7 +3,7 @@ import React from "react";
 import Script from "dangerous-html/react";
 import { Helmet } from "react-helmet";
 import { useState, useEffect } from "react";
-import abi from "../contracts/decat.json";
+import abi from "../contracts/Autocrate.json";
 //import './App.css';
 import { ethers } from "ethers";
 import axios from "axios";
@@ -42,7 +42,7 @@ const ReputationSystem = (props) => {
   }
 
   const connectWallet = async () => {
-    const contractAddress = "0x61eFE56495356973B350508f793A50B7529FF978";//"0xe8750E54151a8eA203ef65e0fB11230676b9b033";
+    const contractAddress = "0x681a204B065604B2b2611D0916Dca94b992f0B41";//"0x61eFE56495356973B350508f793A50B7529FF978";
     const contractAbi = abi.abi;
     try {
       const { ethereum } = window;
@@ -79,21 +79,16 @@ const ReputationSystem = (props) => {
         setAccounts(all_accounts);
         let scores = [];
         let current_mints = 0;
-        let curr_endorsements_received = 0;
-        let curr_endorsements_given = 0;
         let total_acc_score = 0;
+        let score = 0;
         for(let i = 0; i<all_accounts.length; i++){
-            const sbt_score = await contractwithsigner.total_sbt_received_from_org(all_accounts[i]);
-            const endorsement_score = await contractwithsigner.GetEndorsementsAllowed(all_accounts[i]);
-            const endorsement_given = await contractwithsigner.total_endorsement_given(all_accounts[i]);
-            scores.push(sbt_score.toNumber()+endorsement_score.toNumber()*0.75+endorsement_given.toNumber()*0.5);
+            const sbt_score = await contractwithsigner.repute_score(all_accounts[i]);
+            scores.push(sbt_score.toNumber()/100);
             console.log(all_accounts[i], account);
             if(all_accounts[i].toLowerCase() == account){
-              current_mints = sbt_score.toNumber();
-              curr_endorsements_received = endorsement_score.toNumber();
-              curr_endorsements_given = endorsement_given.toNumber();
-              console.log(current_mints, curr_endorsements_received, curr_endorsements_given);
-              total_acc_score = current_mints+curr_endorsements_received*0.75+curr_endorsements_given*0.5;
+              score = sbt_score.toNumber();
+              console.log(score);
+              total_acc_score = score/100;
               console.log(total_acc_score);
             }
         }
@@ -123,7 +118,7 @@ const ReputationSystem = (props) => {
       </Helmet>
       <header data-thq="thq-navbar" className="home-navbar">
         <span className="home-logo"><a  href="/">
-              DeCAT
+              Autocrate
             </a></span>
         <div
           data-thq="thq-navbar-nav"
@@ -167,7 +162,7 @@ const ReputationSystem = (props) => {
             className="home-nav1"
           >
             <div className="home-container1">
-              <span className="home-logo1">DeCAT</span>
+              <span className="home-logo1">Autocrate</span>
               <div data-thq="thq-close-menu" className="home-menu-close">
                 <svg viewBox="0 0 1024 1024" className="home-icon02">
                   <path d="M810 274l-238 238 238 238-60 60-238-238-238 238-60-60 238-238-238-238 60-60 238 238 238-238z"></path>
@@ -208,11 +203,11 @@ const ReputationSystem = (props) => {
         <h1 className="home-header">Please connect Wallet.</h1>
         </div>}
       </section>
-      {isConnected && <label className='mint-btn button'>Total DeCAT's Volume: {totalmints}
+      {isConnected && <label className='mint-btn button'>Total Autocrate's Volume: {totalmints}
       </label>}
-      {isConnected && <label className='home-button7 button'>Total SBT's endorsed to your Account: {curr_endorsements_received}
+      {isConnected && <label className='home-button7 button'>Total SBT's shared to your Account: {curr_endorsements_received}
       </label>}
-      {isConnected && <label className='home-button7 button'>Total SBT's endorsed by you: {curr_endorsements_given}
+      {isConnected && <label className='home-button7 button'>Total SBT's shared by you: {curr_endorsements_given}
       </label>}
       {isConnected && <label className='home-button7 button'>Total Reputation Score: {curr_reputation}
       </label>} <br></br>

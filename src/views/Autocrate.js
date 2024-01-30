@@ -15,7 +15,7 @@ import lighthouse from '@lighthouse-web3/sdk';
 // const authorization = "Basic " + btoa(projectId + ":" + projectSecretKey);
 const apiKey = process.env.REACT_APP_LIGHTHOUSE_API_KEY;
 
-const DeCAT = () => {
+const Autocrate = () => {
     const { state, setState } = useAppContext() 
     const { provider, signer, contract, account, authenticated } = state;
     const [file, setFile] = useState();
@@ -71,7 +71,7 @@ const DeCAT = () => {
         const contractwithsigner = contract.connect(signer);
         console.log('connected with contract');
         try{
-          const resp = await contractwithsigner.safeMint(walletaddress, ans.data.Hash);
+          const resp = await contractwithsigner.safeMint(walletaddress, name, description, result.data.Hash, ans.data.Hash);
           console.log(resp);
           setLoader(true);
           event.target.reset();
@@ -96,12 +96,12 @@ const DeCAT = () => {
     <div>
         <div className="home-container">
           <Helmet>
-            <title>DeCAT</title>
+            <title>Autocrate</title>
             <meta property="og:title" content="Dashboard" />
           </Helmet>
           <header data-thq="thq-navbar" className="home-navbar">
           <span className="home-logo"><a  href="/">
-              DeCAT
+              Autocrate
             </a></span>
             <div
               data-thq="thq-navbar-nav"
@@ -165,7 +165,7 @@ const DeCAT = () => {
                 className="home-nav1"
               >
                 <div className="home-container1">
-                  <span className="home-logo1">DeCAT</span>
+                  <span className="home-logo1">Autocrate</span>
                   <div data-thq="thq-close-menu" className="home-menu-close">
                     <svg viewBox="0 0 1024 1024" className="home-icon02">
                       <path d="M810 274l-238 238 238 238-60 60-238-238-238 238-60-60 238-238-238-238 60-60 238 238 238-238z"></path>
@@ -268,7 +268,7 @@ const DeCAT = () => {
                     shape the world into a better future.
                   </p>
                   <p className="home-paragraph1">
-                    DeCAT is set to release on public blockchain Layer2. The first
+                    Autocrate is set to release on public blockchain Layer2. The first
                     working model is set to be deployed on Polygon mumbai testnet.
                     Why Polygon? Provides scalability enabling rollup mechanism
                     which plays a critical role in multibatch transactions.
@@ -322,8 +322,7 @@ const DeCAT = () => {
                 <div className="home-main1">
                   <div className="home-content02">
                     <h2 className="home-header02">
-                      DeCAT : provides digital and decentralized certification
-                      authority
+                      Autocrate: Blockchain based document verification and storage system
                     </h2>
                     <p className="home-description03">
                       ensuring the authenticity and uniqueness of certificates,
@@ -496,4 +495,4 @@ const DeCAT = () => {
     </div>
     )
 }
-export default DeCAT;
+export default Autocrate;

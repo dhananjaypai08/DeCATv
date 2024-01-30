@@ -157,7 +157,7 @@
 					"type": "address"
 				}
 			],
-			"name": "GetEndorsementsAllowed",
+			"name": "GetSharingAllowed",
 			"outputs": [
 				{
 					"internalType": "uint256",
@@ -225,24 +225,6 @@
 			"type": "function"
 		},
 		{
-			"inputs": [
-				{
-					"internalType": "address",
-					"name": "to",
-					"type": "address"
-				},
-				{
-					"internalType": "string",
-					"name": "uri",
-					"type": "string"
-				}
-			],
-			"name": "endorseMint",
-			"outputs": [],
-			"stateMutability": "nonpayable",
-			"type": "function"
-		},
-		{
 			"inputs": [],
 			"name": "getAccounts",
 			"outputs": [
@@ -282,7 +264,7 @@
 					"type": "address"
 				}
 			],
-			"name": "getEndorsementsReceived",
+			"name": "getSharingReceived",
 			"outputs": [
 				{
 					"internalType": "uint256",
@@ -317,9 +299,31 @@
 			"name": "getTokenIdAccount",
 			"outputs": [
 				{
-					"internalType": "uint256[]",
+					"components": [
+						{
+							"internalType": "string",
+							"name": "name",
+							"type": "string"
+						},
+						{
+							"internalType": "string",
+							"name": "description",
+							"type": "string"
+						},
+						{
+							"internalType": "string",
+							"name": "imageuri",
+							"type": "string"
+						},
+						{
+							"internalType": "uint256",
+							"name": "tokenId",
+							"type": "uint256"
+						}
+					],
+					"internalType": "struct Autocrate.MetaData[]",
 					"name": "",
-					"type": "uint256[]"
+					"type": "tuple[]"
 				}
 			],
 			"stateMutability": "view",
@@ -333,12 +337,34 @@
 					"type": "address"
 				}
 			],
-			"name": "getTokenIdAccountEndorsing",
+			"name": "getTokenIdAccountSharing",
 			"outputs": [
 				{
-					"internalType": "uint256[]",
+					"components": [
+						{
+							"internalType": "string",
+							"name": "name",
+							"type": "string"
+						},
+						{
+							"internalType": "string",
+							"name": "description",
+							"type": "string"
+						},
+						{
+							"internalType": "string",
+							"name": "imageuri",
+							"type": "string"
+						},
+						{
+							"internalType": "uint256",
+							"name": "tokenId",
+							"type": "uint256"
+						}
+					],
+					"internalType": "struct Autocrate.MetaData[]",
 					"name": "",
-					"type": "uint256[]"
+					"type": "tuple[]"
 				}
 			],
 			"stateMutability": "view",
@@ -409,6 +435,21 @@
 				},
 				{
 					"internalType": "string[]",
+					"name": "name",
+					"type": "string[]"
+				},
+				{
+					"internalType": "string[]",
+					"name": "description",
+					"type": "string[]"
+				},
+				{
+					"internalType": "string",
+					"name": "imageuri",
+					"type": "string"
+				},
+				{
+					"internalType": "string[]",
 					"name": "_uri",
 					"type": "string[]"
 				}
@@ -467,8 +508,42 @@
 			"inputs": [
 				{
 					"internalType": "address",
+					"name": "",
+					"type": "address"
+				}
+			],
+			"name": "repute_score",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address",
 					"name": "to",
 					"type": "address"
+				},
+				{
+					"internalType": "string",
+					"name": "name",
+					"type": "string"
+				},
+				{
+					"internalType": "string",
+					"name": "description",
+					"type": "string"
+				},
+				{
+					"internalType": "string",
+					"name": "imageuri",
+					"type": "string"
 				},
 				{
 					"internalType": "string",
@@ -546,6 +621,39 @@
 				}
 			],
 			"name": "setApprovalForAll",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "to",
+					"type": "address"
+				},
+				{
+					"internalType": "string",
+					"name": "name",
+					"type": "string"
+				},
+				{
+					"internalType": "string",
+					"name": "description",
+					"type": "string"
+				},
+				{
+					"internalType": "string",
+					"name": "imageuri",
+					"type": "string"
+				},
+				{
+					"internalType": "string",
+					"name": "uri",
+					"type": "string"
+				}
+			],
+			"name": "shareMint",
 			"outputs": [],
 			"stateMutability": "nonpayable",
 			"type": "function"

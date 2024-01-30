@@ -5,7 +5,7 @@ import { Helmet } from "react-helmet";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { Redirect } from 'react-router-dom'
-import abi from "../contracts/test.json";
+import abi from "../contracts/Autocrate.json";
 //import './App.css';
 import { ethers } from "ethers";
 
@@ -13,7 +13,7 @@ import "./home.css";
 // import { useAppContext } from "../AppContext";
 // import { CovalentClient } from "@covalenthq/client-sdk";
 
-const Endorsement = () => {
+const Sharing = () => {
   // const { state, setState } = useAppContext()
   // const { provider, signer, contract, account, authenticated } = state;
   // const [isConnected, setConnection] = useState(false);
@@ -28,7 +28,7 @@ const Endorsement = () => {
 
   useEffect(() => {
     const connectWallet = async () => {
-      const contractAddress = "0x798dEd76b55aC40bDBc607BE0038Becf7074A26B";//"0x581aF0F29670d8Ca269A6deF3c513c953b504796";
+      const contractAddress = "0x681a204B065604B2b2611D0916Dca94b992f0B41"//"0x816df2a69bB2D246B1ee5a4F2d1B3EbcB3aF7C85";//"0x61eFE56495356973B350508f793A50B7529FF978";
       const contractAbi = abi.abi;
       try {
         const { ethereum } = window;
@@ -498,4 +498,4 @@ const Endorsement = () => {
   );
 };
 
-export default Endorsement;
+export default Sharing;
