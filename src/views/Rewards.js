@@ -3,160 +3,68 @@ import React from "react";
 import Script from "dangerous-html/react";
 import { Helmet } from "react-helmet";
 import { useState, useEffect } from "react";
-import axios from "axios";
 import { Redirect } from 'react-router-dom'
 import abi from "../contracts/Autocrate.json";
 //import './App.css';
 import { ethers } from "ethers";
+import axios from "axios";
 
 import "./home.css";
-// import { useAppContext } from "../AppContext";
-// import { CovalentClient } from "@covalenthq/client-sdk";
+import { useAppContext } from "../AppContext";
+const fetch = require('node-fetch');
 
-const Portfolio = () => {
-  const [address, setAddress] = useState();
-  const [contract, setNewContract] = useState();
-  // const [totalmints, setMints] = useState(0);
-  const [signer, setSigner] = useState();
-  const [address_mints, setAddressMints] = useState("Please Enter an address first");
-  const [nft_data, setNFTData] = useState([]);
-  const [fetched_nftdata, setNFT] = useState(false);
-  const [loader, setLoader] = useState(false);
-  const [endorsed_mints, setEndorsingData] = useState([]);
-  const [get_endorsed_cids, setEndorsedCid] = useState([]);
-  const [total_endorsed_mints, setEndorsedMints] = useState("Please Enter an address first");
-  const [selectedData, setSelectedData] = useState();
-  const [qrcode, setQRcode] = useState("");
-  const [qrcodegenerated, setQRcodeStatus] = useState(false);
-  const [selectedIndex, setIndex] = useState();
-
-  const nftipfsAddress = "https://gateway.lighthouse.storage/ipfs/";
-
-  useEffect(() => {
-    const connectWallet = async () => {
-      const contractAddress = "0x681a204B065604B2b2611D0916Dca94b992f0B41"//"0x816df2a69bB2D246B1ee5a4F2d1B3EbcB3aF7C85";//"0x61eFE56495356973B350508f793A50B7529FF978";
-      const contractAbi = abi.abi;
-      try {
-        const { ethereum } = window;
-        if (ethereum) {
-          ethereum.on("chainChanged", () => {
-            window.location.reload();
-          });
-          ethereum.on("accountsChanged", () => {
-            window.location.reload();
-          });
-          const accounts = await ethereum.request({
-            method: "eth_requestAccounts",
-          });
-          const account = accounts[0];
-          setAddress(account);
-          const provider = new ethers.providers.Web3Provider(window.ethereum);
-
-          const signer = provider.getSigner();
-
-          const contract = new ethers.Contract(
-            contractAddress,
-            contractAbi,
-            signer
-          );
-          const authenticated = false;
-          setNewContract(contract);
-          setSigner(signer);
-          // setState({ provider, signer, contract, account, authenticated });
-          // setConnection(true);
-          // setMsg(account);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-  };
-  connectWallet();
-  }, []);
-
-  const getNFT = async(event) => {
-    event.preventDefault();
-    setQRcodeStatus(false);
-    console.log(contract, signer);
-    if(contract != undefined && signer!=undefined){
-        const address = document.querySelector('#walletaddress').value;
-        const contractwithsigner = contract.connect(signer);
-        const resp = await contractwithsigner.total_sbt_received_from_org(address);
-        setAddressMints(resp.toNumber());
-        const endorsedmints = await contractwithsigner.getSharingReceived(address);
-        setEndorsedMints(endorsedmints.toNumber())
-        // const client = new CovalentClient("cqt_rQt3xrBGR96Gg3bp7qk7vGJDQ8rV");
-        // const response = await client.BalanceService.getTokenBalancesForWalletAddress("eth-sepolia",address, {"nft": true});
-        // console.log(response.data["items"], response.data["items"].length);
-        setLoader(true);
-        const nfts = await contractwithsigner.getTokenIdAccount(address);
-        let nft_datas = []
-        for(var i=0;i<nfts.length;i++){
-          // const tokenId = nfts[i].toNumber();
-          // const ipfs_cid = await contractwithsigner.tokenURI(tokenId);
-          // console.log(ipfs_cid);
-          // try{
-          //   await axios.get(nftipfsAddress+ipfs_cid).then((metadata) => {
-          //     nft_datas.push(metadata.data);
-          //   });
-          // } catch(e){
-          //   console.log('something went wrong');
-          // }
-          nft_datas.push({"name": nfts[i].name, "description": nfts[i].description, "image": nftipfsAddress+nfts[i].imageuri, "tokenId": nfts[i].tokenId.toNumber()});
-          
-        }
-        const endorsed_nfts = await contractwithsigner.getTokenIdAccountSharing(address);
-        let endorsed = [];
-        let endorsed_ipfs = [];
-        for(var i=0;i<endorsed_nfts.length;i++){
-          const tokenId = endorsed_nfts[i].tokenId.toNumber();
-          const ipfs_endorsed = await contractwithsigner.tokenURI(tokenId);
-          endorsed.push({"name": endorsed_nfts[i].name, "description": endorsed_nfts[i].description, "image": nftipfsAddress+nfts[i].imageuri, "tokenId": nfts[i].tokenId.toNumber()});
-          // console.log(ipfs_endorsed);
-          // await axios.get(nftipfsAddress+ipfs_endorsed).then((metadata) => {
-          //   endorsed_ipfs.push(ipfs_endorsed);
-          //   endorsed.push(metadata.data);
-          // });
-        }
-        console.log(nft_datas);
-        setEndorsingData(endorsed);
-        setEndorsedCid(endorsed_ipfs);
-        setNFT(true);
-        setNFTData(nft_datas);
-        setLoader(false);
-    } else{alert("Please connect to your metamask wallet");}
-    
-  }
-    
-  const handleButtonClick = async(index) => {
-    try {
-      const response = await axios.post('http://localhost:8082/generate_qrcode', nft_data[index], {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-      if(response.status == 200){
-        console.log(response.data, response);
-        setQRcode(response.data);
-        setQRcodeStatus(true);
-        setSelectedData(nft_data[index]);
-        setIndex(index);
-      }
-      else{
-        console.log('something went wrong')
-      }
-    } catch (error) {
-      console.error('Error during POST request:', error.message);
-    }
-  };
+const Rewards = () => {
   
+
+  const getBalance = async(event) => {
+    event.preventDefault();
+    const walletid = document.querySelector('#walletid').value;
+    const url = `https://api.circle.com/v1/w3s/wallets/${walletid}/balances`;
+    const options = {
+    method: 'GET',
+    headers: {'Content-Type': 'application/json', Authorization: 'Bearer TEST_API_KEY:ee43073e8f53859f8c670da3fefd69c4:e12f1fb80da373c31d4db2f5af67052f'}
+    };
+
+    fetch(url, options)
+    .then(res => res.json())
+    .then(json => console.log(json))
+    .catch(err => console.error('error:' + err));
+        event.target.reset();
+    }
+
+    const sendMATIC = async(event) => {
+        event.preventDefault();
+        const walletaddress = document.querySelector('#walletid').value;
+        const amount = document.querySelector('#amount').value;
+        const url = 'https://api.circle.com/v1/w3s/developer/transactions/transfer';
+        const options = {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json', Authorization: 'Bearer TEST_API_KEY:ee43073e8f53859f8c670da3fefd69c4:e12f1fb80da373c31d4db2f5af67052f'},
+        body: JSON.stringify({
+            idempotencyKey: 'b242be54-f057-4ed1-a638-d20605ec6180',
+            entitySecretCipherText: 'hyBXEY+GUF3Jt9u6fE8qFxo9cGy5eXZxH84c8ReU+3mArXZsfKf4MW34eQaBctulsYCeevpprQSdrfBh4WVrdLgCDthwYfC5Z9deJ3jFUdczwTS+H5O6T2BeAyCecbTN0/Sc8vtRsmw+WT6B8tnP1NH++MwFA7KafHSMcjhwYZVDnl+VokA55lcng/iCanY3l3PSylJMp2APVh3fI6QBd1JRyJLOc7xWaY1Daij9Azlug449dTLpTj8/UF82Ao0KoL5Kx6/1qX+creaS/BrC2obfqumJjL/9vgBXR2Fpha9WzcNcFZJIGJF6l6l+vjfuiSnSnKIMaAA79QIYUbFlmZ/lQDffzcEqZYgt/aA65gtdgI0x9rKR91UlxUs2lB+K75/JfmtLyfcCyddIvJQXR11j5ghT4gZW/sNMq6v6B0Iu4YSX6nV34Fzv64N9tFCQ6UdO2hslmdhmdA8ZxXstgkHHEWUexTK6gD92CB+owOwzXKD8uKZGfSrg3PKSJtQH20M0FomnzmFsaEb8/CwBWeAH8SB14ixUVclMEa/UK9zTqyS8MqUKp3leeXVS+63FlXZRwz5aRg5qIh93dWM9faGC5JuebX9f7xrhhBDnnUEGZFAyXEXZ7q30QPZaW4f2mskRAm8BRmivRiz51owyz+k/ShH7sKptkEEA0yhJHcM=',
+            amounts: [amount],
+            destinationAddress: walletaddress,
+            feeLevel: 'HIGH',
+            tokenId: 'e4f549f9-a910-59b1-b5cd-8f972871f5db',
+            walletId: 'a62612d7-91b6-5180-85e0-75501a90b039'
+        })
+        };
+        fetch(url, options)
+        .then(res => res.json())
+        .then(json => console.log(json))
+        .catch(err => console.error('error:' + err));
+        event.target.reset();
+    }
   return (
     <div className="home-container">
       <Helmet>
-        <title>Portfolio</title>
+        <title>Home</title>
         <meta property="og:title" content="Dashboard" />
+        <link href="https://db.onlinewebfonts.com/c/974bd878107a4b17fbb34db4029679e9?family=Clepto+Regular" rel="stylesheet"></link>
       </Helmet>
       <header data-thq="thq-navbar" className="home-navbar">
-      <span className="home-logo"><a  href="/">
+        <span className="home-logo"><a  href="/">
               Autocrate
             </a></span>
         <div
@@ -168,24 +76,20 @@ const Portfolio = () => {
             data-thq="thq-navbar-nav-links"
             data-role="Nav"
             className="home-nav"
-          > <a href="/" className="home-button2 button-clean button">
-          Home
-        </a>
-            <a href="/multiple" className="home-button2 button-clean button">
-              Multiple Transaction
-            </a>
+          >
+            <a href="/rewards" className="home-button2 button-clean button">
+              Rewards
+              </a>
             
-            <a href="/reputation" className="home-button2 button-clean button">
-              Reputation
-            </a>
+            
           </nav>
         </div>
         <div data-thq="thq-navbar-btn-group" className="home-btn-group">
-          <div className="home-socials">
-          </div>
           
+          {/* <button onClick={checkConnectionBeforeConnecting} className="button wallet-btn">
+            {connectmsg}
+          </button> */}
         </div>
-        
         <div data-thq="thq-burger-menu" className="home-burger-menu">
           <button className="button home-button5">
             <svg viewBox="0 0 1024 1024" className="home-icon">
@@ -212,10 +116,10 @@ const Portfolio = () => {
               data-role="Nav"
               className="home-nav2"
             >
-              
             <a href="/multiple" className="home-button2 button-clean button">
               Multiple Transaction
             </a>
+
             </nav>
             <div className="home-container2">
               <button className="home-login button">Login</button>
@@ -235,79 +139,51 @@ const Portfolio = () => {
           </div>
         </div>
       </header>
-      <div className="home-hero">
-      <label className='home-button7 button'>Total Autocrate NFT's Minted to your account: {address_mints}
-      </label>
-      <label className='home-button7 button'>Total Autocrate NFT's Shared to your wallet: {total_endorsed_mints}</label>
+      
+      <div className="EmptySpace">
+
       </div>
-      
-      
       <section className="home-hero">
-       
-    <div class="home-hero">
-      <label className='home-button7 button'>Total NFT's Received from Autocrate ORG: {address_mints}
-      </label>
-    </div>
-
-    <div class="home-container">
-      {qrcodegenerated && 
-      <div className="home-card" style={{width: 700}}>
-      <li className="home-paragraph">QRcode generated as verifiable proof
-      <img src={qrcode} className="home-image06" ></img>
-      </li>
-      </div>
-      }
-    </div>
-
-    <form onSubmit={getNFT}>
-      <div className="home-buttons" style={{width: 300}}>
-        <label className='home-links' style={{color: "white"}}>Wallet Address</label>
-         <input type="text" id="walletaddress" style={{width: 300}} className="button"></input>
-         <br></br><br></br>
-         <button type="submit" className='home-button6 button'>Get NFT</button>
-         {loader && <div><label className='home-links' style={{color: "white"}}>Fetching SBT...</label><div className="loader"></div></div>}
-      </div>
-    </form>
-
-    <div className="home-container">
-    <label className='home-button7 button'>Autocrate SBT's minted to your account
-    </label>
-        <ul className="flex-container">{fetched_nftdata && 
-        nft_data.map((nft, index) => (
-        <>
-          <div className="home-card" style={{width: 700}}>
-          <li className="home-paragraph">{nft.name}: <br></br>{nft.description}
-          <img src={nft.image} className="home-image06" ></img>
-          </li>
-          <br></br>
-          {<button className='home-button6 button' onClick={() => handleButtonClick(index)}>Generate Proof</button>}
-          </div>
-        </>
-        ))}
-        </ul>
-      
-    </div>
-
-    <div className="home-container">
-    <label className='home-button7 button'>Autocrate SBT's shared to your account
-      </label>
-        <ul className="flex-container">{fetched_nftdata && 
-        endorsed_mints.map((nft,index) => (
-        <>
-          <div className="home-card" style={{width: 700}}>
-          <li className="home-paragraph">{nft.name}: <br></br>{nft.description}
-          <img src={nft.image} className="home-image06" ></img>
-          </li>
-          <br></br>
-          {<button className='home-button6 button' onClick={() => handleButtonClick(index)}>Generate Proof</button>}
-          </div>
-        </>
-        ))}
-        </ul>
-    </div>
-
+      <div className="home-heading">
+          <h1 className="home-header">Reward your Subordinates</h1>
+          <p className="home-caption">
+          Digitize your content
+          </p>
+        </div>
+        <div className="home-buttons">
+          {/* <button onClick={checkConnectionBeforeConnecting} className="button">
+            {connectmsg}
+          </button> */}
+          
+        </div>
       </section>
       <section className="home-description">
+      
+    
+    <div className="home-container">
+     <form onSubmit={getBalance}>
+        <label className='home-logo'>Get Balance of your wallet</label> <br></br>
+         <label className='home-links'style={{color: "white"}}>Wallet Address</label>
+         <input type="text" id="walletid" style={{width: 300}} className="button"></input>
+         <br></br><br></br>
+         <button type="submit" className='home-button6 button'>GetBalance</button>
+        
+     </form>
+     <br>
+     </br>
+      <form onSubmit={sendMATIC}>
+        <label className='home-logo'>Rewarding will only support growth</label> <br></br>
+         <label className='home-links'style={{color: "white"}}>Wallet Address</label>
+         <input type="text" id="walletaddress" style={{width: 300}} className="button"></input>
+         <br></br><br></br>
+         <label className='home-links' style={{color: "white"}}>Enter Amount</label>
+         <input type="text" id="amount" placeholder="Enter Your Amount" className='home-button7 button'></input>
+
+         <button type="submit" className='home-button6 button'>SEND</button>
+        
+     </form>
+     
+    </div>
         <img
           alt="image"
           src="/hero-divider-1500w.png"
@@ -320,10 +196,9 @@ const Portfolio = () => {
         <div className="home-main5">
           <div className="home-branding">
             <div className="home-heading10">
-              <h2 className="home-logo2">Character</h2>
+              <h2 className="home-logo2">ZKBuilders</h2>
               <p className="home-caption17">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore.
+              Empower your professional journey with Autocrate. Join us in creating a job market where trust is inherent, and your identity is truly yours. Let's build a decentralized future together.
               </p>
             </div>
             <div className="home-socials1">
@@ -420,7 +295,7 @@ const Portfolio = () => {
           </div>
         </div>
         <span className="home-copyright">
-          © 2022 Character. All Rights Reserved.
+          © 2023 Character. All Rights Reserved.
         </span>
       </footer>
       <div>
@@ -432,4 +307,4 @@ const Portfolio = () => {
   );
 };
 
-export default Portfolio;
+export default Rewards;

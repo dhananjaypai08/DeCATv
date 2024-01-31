@@ -11,6 +11,7 @@ import Sharing from './views/Sharing'
 import { AppProvider } from './AppContext'
 import Multiple from './views/Multiple'
 import ReputationSystem from './views/ReputationSystem'
+import Rewards from './views/Rewards'
 
 const App = () => {
   return (
@@ -21,6 +22,7 @@ const App = () => {
         <Route component={Autocrate} exact path="/autocrate" />
         <Route component={Verify} exact path="/verify" />
         <Route component={Portfolio} exact path="/portfolio" />
+        <Route component={Rewards} exact path="/rewards" />
         <Route component={Sharing} exact path="/sharing" />
         <Route component={Multiple} exact path="/multiple" />
         <Route component={ReputationSystem} exact path="/reputation" />

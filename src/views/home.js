@@ -31,6 +31,9 @@ const Home = (props) => {
   const [endorsementsAllowed, setEndorsementsAllowed] = useState(0);
   const [admin, setAdmin] = useState(false);
   const [selectedData, setSelectedData] = useState();
+  const [verified, setVerified] = useState();
+  const [verifiedURI, setverifiedURI] = useState();
+  const [verifiedData, setVerifiedData] = useState();
 
   const nftipfsAddress = "https://gateway.lighthouse.storage/ipfs/";
 
@@ -132,6 +135,22 @@ const Home = (props) => {
     }
   };
 
+  const Verify = async() => {
+    const response = await axios.post('http://localhost:8082/scanQR');
+    // console.log(response.data["verified"], response.data["uri"]);
+    if(response.data["verified"] == true){
+      const getdata = await getVerificationData(response.data["uri"]);
+      setVerifiedData(getdata.data);
+      setVerified(response.data["verified"]);
+      setverifiedURI(response.data["uri"]);
+      console.log(getdata);
+    }
+  };
+
+  const getVerificationData = async(uri) =>{
+    return await axios.get(nftipfsAddress+uri)
+  }
+
   return (
     <div className="home-container">
       <Helmet>
@@ -153,11 +172,15 @@ const Home = (props) => {
             data-role="Nav"
             className="home-nav"
           >
+            <a href="/rewards" className="home-button2 button-clean button">
+              Rewards
+              </a>
             
             {isConnected && 
             <div><a href="/multiple" className="home-button2 button-clean button">
               Multiple Transaction
             </a>
+            
             <a href="/portfolio" className="home-button2 button-clean button">
               Portfolio
             </a>
@@ -221,6 +244,21 @@ const Home = (props) => {
           </div>
         </div>
       </header>
+      <button className='home-button6 button' onClick={() => Verify()}>Verify Credentials/Proofs</button>
+      {verified==true &&
+      <div className="home-card">
+          <li className="home-paragraph">The NFT with Hash: {verifiedURI} is <h3>verified</h3>
+          Name: {verifiedData["name"]} <br></br> Description: {verifiedData["description"]} <br></br> TokenId: {verifiedData["tokenId"]}
+          <img src={verifiedData["image"]} className="home-image05" ></img>
+          </li>
+      </div>
+      }
+      {verified==false &&
+      <div className="home-card" style={{width: 700}}>
+          <li className="home-paragraph">The NFT with Hash: {verifiedURI} is <h3>NOT Verified</h3>
+          </li>
+      </div>
+      }
       <div className="EmptySpace">
 
       </div>
