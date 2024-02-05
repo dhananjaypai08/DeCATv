@@ -236,19 +236,13 @@ const Portfolio = () => {
         </div>
       </header>
       <div className="home-hero">
-      <label className='home-button7 button'>Total Autocrate NFT's Minted to your account: {address_mints}
+      <label className='home-button7 button'>Total Autocrate NFT's Minted to your account: {address_mints}<br></br>
+      Total Autocrate NFT's Shared to your wallet: {total_endorsed_mints}
       </label>
-      <label className='home-button7 button'>Total Autocrate NFT's Shared to your wallet: {total_endorsed_mints}</label>
       </div>
-      
-      
-      <section className="home-hero">
-       
-    <div class="home-hero">
       <label className='home-button7 button'>Total NFT's Received from Autocrate ORG: {address_mints}
       </label>
-    </div>
-
+      
     <div class="home-container">
       {qrcodegenerated && 
       <div className="home-card" style={{width: 700}}>
@@ -258,16 +252,17 @@ const Portfolio = () => {
       </div>
       }
     </div>
-
     <form onSubmit={getNFT}>
-      <div className="home-buttons" style={{width: 300}}>
-        <label className='home-links' style={{color: "white"}}>Wallet Address</label>
+      <div className="home-container" style={{width: 300}}>
+        <label className='home-links' style={{color: "white"}}>Enter Wallet Address</label>
          <input type="text" id="walletaddress" style={{width: 300}} className="button"></input>
-         <br></br><br></br>
+        
          <button type="submit" className='home-button6 button'>Get NFT</button>
-         {loader && <div><label className='home-links' style={{color: "white"}}>Fetching SBT...</label><div className="loader"></div></div>}
       </div>
+      {loader && <div><label className='home-links' style={{color: "white"}}>Fetching SBT...</label><div className="loader"></div></div>}
     </form>
+    
+      <section className="home-hero">
 
     <div className="home-container">
     <label className='home-button7 button'>Autocrate SBT's minted to your account
@@ -275,7 +270,7 @@ const Portfolio = () => {
         <ul className="flex-container">{fetched_nftdata && 
         nft_data.map((nft, index) => (
         <>
-          <div className="home-card" style={{width: 700}}>
+          <div className="home-card SBT" style={{width: 700}}>
           <li className="home-paragraph">{nft.name}: <br></br>{nft.description}
           <img src={nft.image} className="home-image06" ></img>
           </li>
@@ -294,7 +289,7 @@ const Portfolio = () => {
         <ul className="flex-container">{fetched_nftdata && 
         endorsed_mints.map((nft,index) => (
         <>
-          <div className="home-card" style={{width: 700}}>
+          <div className="home-card SBT" style={{width: 700}}>
           <li className="home-paragraph">{nft.name}: <br></br>{nft.description}
           <img src={nft.image} className="home-image06" ></img>
           </li>

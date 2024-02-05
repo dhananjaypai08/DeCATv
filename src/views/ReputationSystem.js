@@ -205,12 +205,10 @@ const ReputationSystem = (props) => {
       </section>
       {isConnected && <label className='mint-btn button'>Total Autocrate's Volume: {totalmints}
       </label>}
-      {isConnected && <label className='home-button7 button'>Total SBT's shared to your Account: {curr_endorsements_received}
+      {isConnected && <label className='home-button7 button'>Total SBT's shared to your Account: {curr_endorsements_received} <br></br>
+      Total SBT's shared by you: {curr_endorsements_given} <br></br>
+      Total Reputation Score: {curr_reputation} <br></br>
       </label>}
-      {isConnected && <label className='home-button7 button'>Total SBT's shared by you: {curr_endorsements_given}
-      </label>}
-      {isConnected && <label className='home-button7 button'>Total Reputation Score: {curr_reputation}
-      </label>} <br></br>
       {isConnected && <span className="reputation-txt">Reputation Chart</span>}
       <div className="home-hero">
       {showGraph &&  
@@ -221,7 +219,7 @@ const ReputationSystem = (props) => {
         labels: accounts, 
         datasets: [ 
           { 
-            label: "Accounts", 
+            label: "Score", 
             // Data or value of your each variable 
             data: reputation_score, 
             // Color of each bar 

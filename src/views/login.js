@@ -44,13 +44,12 @@ const Loginsystem = () => {
     <div data-thq="thq-close-menu" className="home-caption01">Wrong credentials
     </div>
     }
-    <form onSubmit={SignIn}>
-        <label className='home-logo'>Welcome Admin</label> <br></br>
+    <form onSubmit={SignIn} className='login-container'>
+        <label className='home-logo'>Welcome Admin</label> 
          <label className='home-links'style={{color: "white"}}>Wallet Address</label>
-         <input type="url" id="walletaddress" value={account ? account: ""} disabled style={{width: 300}} className="button"></input>
-         <br></br><br></br>
+         <input type="url" id="walletaddress" value={account ? account: ""} disabled className="button"></input>
          <label className='home-links' style={{color: "white"}}>Enter Password</label>
-         <input type="password" id="password" placeholder="Enter Your Password" className='home-button7 button'></input>
+         <input type="password" id="password" placeholder="Enter Your Password" className='button'></input>
 
          <button type="submit" className='home-button6 button'>Login</button>
         

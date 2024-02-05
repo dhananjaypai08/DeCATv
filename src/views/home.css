@@ -1,11 +1,24 @@
 .home-container {
   width: 100%;
   display: flex;
-  overflow: auto;
   /*min-height: 100vh;*/
   align-items: center;
   flex-direction: column;
-  background-color: #27272D;
+  background-color: #151515;
+}
+.login-container {
+  /* width: 100%;*/
+  height: 400px;
+  width: 500px;
+  display: flex;
+  overflow: auto;
+  /*min-height: 100vh;*/
+  flex-direction: column;
+  align-items: center;
+  background-color: #242222;
+  /* All corners with a 10px radius */
+  border-radius: 10px;
+  font-style: normal;
 }
 .home-navbar {
   width: 100%;
@@ -19,23 +32,28 @@
 
 .wallet-btn{
   white-space: nowrap; /* Prevent text from wrapping to the next line */
-      overflow: hidden;    /* Hide any overflowing content */
-      text-overflow: ellipsis; /* Show an ellipsis (...) for truncated text */
-      max-width: 200px;    /* Adjust the maximum width as needed */
-      text-align: left; 
+  overflow: hidden;    /* Hide any overflowing content */
+  text-overflow: ellipsis; /* Show an ellipsis (...) for truncated text */
+  max-width: 200px;    /* Adjust the maximum width as needed */
+  text-align: left; 
 }
 
 /* If you want to set a background color for the navbar */
 .home-navbar {
-  background-color: rgb(6, 7, 3); /* Replace with your desired background color */
+  /* background-color: rgb(6, 7, 3); Replace with your desired background color */
+  background-color: #121212;
   color: white; /* Adjust text color based on your design */
 }
 
 .home-logo {
-  color: rgb(255, 255, 255);
+  color: #e0e0e0;
   font-size: 32px;
   font-style: normal;
   font-weight: 600;
+  transition: transform 0.2s;
+}
+.home-logo:hover{
+  transform: rotate(30deg) scale(1.2);
 }
 .home-desktop-menu {
   display: flex;
@@ -56,6 +74,10 @@
 }
 .home-button2 {
   color: rgb(255, 255, 255);
+  transition: transform 0.2s;
+}
+.home-button2:hover{
+  transform: rotate(30deg) scale(1.2);
 }
 .home-button3 {
   color: rgb(255, 255, 255);
@@ -120,7 +142,7 @@
   justify-content: space-between;
 }
 .home-logo1 {
-  color: rgb(255, 255, 255);
+  color: #e0e0e0;
   font-size: 32px;
   font-style: normal;
   font-weight: 600;
@@ -276,7 +298,7 @@
 .home-links {
   width: 100%;
   display: flex;
-  align-items: stretch;
+  align-items: center;
   flex-direction: column;
   font-size: 25px;
   padding:25px;
@@ -326,7 +348,7 @@
   padding-right: var(--dl-space-space-fiveunits);
   flex-direction: column;
   padding-bottom: var(--dl-space-space-fourunits);
-  background-color: #000000;
+  background-color: #121212;
 }
 .home-avatar {
   width: 60px;
@@ -404,7 +426,7 @@
   padding-right: var(--dl-space-space-fiveunits);
   flex-direction: column;
   padding-bottom: var(--dl-space-space-fourunits);
-  background-color: #FFCF77;
+  background-color: #00ffbd;
 }
 .home-avatar2 {
   width: 60px;
@@ -1144,6 +1166,7 @@
   margin-left: 35%;
   padding-left: 8%;
   padding-right: 8%;
+  color: #000605;
 }
 .home-step1 {
   gap: var(--dl-space-space-oneandhalfunits);
@@ -2498,7 +2521,8 @@
 
 .mint-btn{
   
-    color: var(--dl-color-gray-black);
+    /* color: var(--dl-color-gray-black); */
+    color: #fff;
     cursor: pointer;
     display: inline-block;
     
@@ -2515,7 +2539,8 @@
     padding-right: 35px;
     padding-bottom: 20px;
     padding-top: 20px;
-    background-color: rgb(255, 207, 119);
+    /* background-color: rgb(255, 207, 119); */
+    background-color: #232323;
     margin-top: var(--dl-space-space-oneandhalfunits);
 }
 
@@ -2630,4 +2655,11 @@ td{
 .leaderboard-table th:nth-child(3),
 .leaderboard-table td:nth-child(3) {
   width: 150px;
+}
+.SBT {
+  color: rgb(255, 255, 255);
+  transition: transform 0.2s;
+}
+.SBT:hover{
+  transform: scale(1.08);
 }

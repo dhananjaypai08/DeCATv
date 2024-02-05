@@ -52,7 +52,7 @@
   border-radius: 0px;
   padding-right: var(--dl-space-space-oneandhalfunits);
   padding-bottom: var(--dl-space-space-unit);
-  background-color: rgb(255, 207, 119);
+  background-color: #00ffbd;
 }
 
 .button:hover {

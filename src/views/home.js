@@ -245,6 +245,10 @@ const Home = (props) => {
         </div>
       </header>
       <button className='home-button6 button' onClick={() => Verify()}>Verify Credentials/Proofs</button>
+      <div className="EmptySpace">
+
+      </div>
+    <ul className="home-cards">
       {verified==true &&
       <div className="home-card">
           <li className="home-paragraph">The NFT with Hash: {verifiedURI} is <h3>verified</h3>
@@ -259,14 +263,13 @@ const Home = (props) => {
           </li>
       </div>
       }
-      <div className="EmptySpace">
-
-      </div>
-      {isConnected && <label className='mint-btn'>Total Autocrate's Minting Volume: {totalmints}
-      </label>}<br></br>
-      {isConnected && <label className='mint-btn'>Total Autocrate's Shared Volume: {total_endorsements}</label>}<br></br>
+      </ul>
+      
+      {isConnected && <><label className='mint-btn'>Total Autocrate's Minting Volume: {totalmints}
+      </label> <label className='mint-btn'>Total Autocrate's Shared Volume: {total_endorsements}</label><br></br></>}
       {isConnected && admin && <Loginsystem></Loginsystem>}
       <section className="home-hero">
+      
       {!isConnected && <div className="home-heading">
           <h1 className="home-header">Store. Share. Succeed</h1>
           <p className="home-caption">
@@ -281,17 +284,13 @@ const Home = (props) => {
         </div>
       </section>
       <section className="home-description">
-      {isConnected && <div className="home-hero">
+      {isConnected && <div className="home-container">
       <p className="caption">
           Your Autocrate Profile:
-          </p>
-      <label className='home-button7 button'>Total Autocrate Sharings allowed: {endorsementsAllowed}
-      </label>
-      </div>}
-      {isConnected && <div className="home-container">
-       <label className='home-button7 button'>Autocrate SBT's minted to your account
+      </p>
+      <label className='home-button7 button'>Total Autocrate Sharings allowed: {endorsementsAllowed}</label>
+        <label className='home-button7 button'>Autocrate SBT's minted to your account
         </label>
-        
         <ul>{fetched_nftdata && 
         nft_data.map((nft, index) => (
         <>
