@@ -96,12 +96,12 @@ const Autocrate = () => {
     <div>
         <div className="home-container">
           <Helmet>
-            <title>Autocrate</title>
+            <title>DeCAT</title>
             <meta property="og:title" content="Dashboard" />
           </Helmet>
           <header data-thq="thq-navbar" className="home-navbar">
           <span className="home-logo"><a  href="/">
-              Autocrate
+              DeCAT
             </a></span>
             <div
               data-thq="thq-navbar-nav"
@@ -165,7 +165,7 @@ const Autocrate = () => {
                 className="home-nav1"
               >
                 <div className="home-container1">
-                  <span className="home-logo1">Autocrate</span>
+                  <span className="home-logo1">DeCAT</span>
                   <div data-thq="thq-close-menu" className="home-menu-close">
                     <svg viewBox="0 0 1024 1024" className="home-icon02">
                       <path d="M810 274l-238 238 238 238-60 60-238-238-238 238-60-60 238-238-238-238 60-60 238 238 238-238z"></path>

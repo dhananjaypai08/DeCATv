@@ -160,7 +160,7 @@ const Home = (props) => {
       </Helmet>
       <header data-thq="thq-navbar" className="home-navbar">
         <span className="home-logo"><a  href="/">
-              Autocrate
+              DeCAT
             </a></span>
         <div
           data-thq="thq-navbar-nav"
@@ -209,7 +209,7 @@ const Home = (props) => {
             className="home-nav1"
           >
             <div className="home-container1">
-              <span className="home-logo1">Autocrate</span>
+              <span className="home-logo1">DeCAT</span>
               <div data-thq="thq-close-menu" className="home-menu-close">
                 <svg viewBox="0 0 1024 1024" className="home-icon02">
                   <path d="M810 274l-238 238 238 238-60 60-238-238-238 238-60-60 238-238-238-238 60-60 238 238 238-238z"></path>
@@ -245,10 +245,8 @@ const Home = (props) => {
         </div>
       </header>
       <button className='home-button6 button' onClick={() => Verify()}>Verify Credentials/Proofs</button>
-      <div className="EmptySpace">
 
-      </div>
-    <ul className="home-cards">
+    {verified==true && <ul className="home-cards">
       {verified==true &&
       <div className="home-card">
           <li className="home-paragraph">The NFT with Hash: {verifiedURI} is <h3>verified</h3>
@@ -263,10 +261,10 @@ const Home = (props) => {
           </li>
       </div>
       }
-      </ul>
+      </ul>}
       
-      {isConnected && <><label className='mint-btn'>Total Autocrate's Minting Volume: {totalmints}
-      </label> <label className='mint-btn'>Total Autocrate's Shared Volume: {total_endorsements}</label><br></br></>}
+      {isConnected && <><label className='mint-btn'>Total DeCAT's Minting Volume: {totalmints}
+      </label> <label className='mint-btn'>Total DeCAT's Shared Volume: {total_endorsements}</label><br></br></>}
       {isConnected && admin && <Loginsystem></Loginsystem>}
       <section className="home-hero">
       
@@ -286,10 +284,10 @@ const Home = (props) => {
       <section className="home-description">
       {isConnected && <div className="home-container">
       <p className="caption">
-          Your Autocrate Profile:
+          Your DeCAT Profile:
       </p>
-      <label className='home-button7 button'>Total Autocrate Sharings allowed: {endorsementsAllowed}</label>
-        <label className='home-button7 button'>Autocrate SBT's minted to your account
+      <label className='home-button7 button'>Total DeCAT Sharings allowed: {endorsementsAllowed}</label>
+        <label className='home-button7 button'>DeCAT SBT's minted to your account
         </label>
         <ul>{fetched_nftdata && 
         nft_data.map((nft, index) => (
@@ -298,7 +296,6 @@ const Home = (props) => {
           <li className="home-paragraph">{nft.name}: <br></br>{nft.description}
           <img src={nft.image} className="home-image06" ></img>
           </li>
-          <br></br>
           {ipfs_hash !== get_nft_cids[index] && <button className='home-button6 button' onClick={() => handleButtonClick(index)}>Share</button>}
           {ipfs_hash == get_nft_cids[index] && <Share passedValue={ipfs_hash} data={selectedData}></Share>}
           </div>
@@ -308,7 +305,7 @@ const Home = (props) => {
     </div>}
     
     {isConnected && <div className="home-container">
-      <label className='home-button7 button'>Autocrate SBT's shared to your account
+      <label className='home-button7 button'>DeCAT SBT's shared to your account
       </label>
         <ul>{fetched_nftdata && 
         endorsed_mints.map((nft, index) => (
@@ -356,7 +353,7 @@ const Home = (props) => {
             <div className="home-main1">
               <div className="home-content02">
                 <h2 className="home-header02">
-                  Autocrate: Decentralized Identity verification and storage system
+                  DeCAT: Decentralized Identity verification and storage system
                 </h2>
                 <p className="home-description03">
                   Ensuring the authenticity and uniqueness of certificates,
