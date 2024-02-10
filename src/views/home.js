@@ -172,10 +172,6 @@ const Home = (props) => {
             data-role="Nav"
             className="home-nav"
           >
-            <a href="/rewards" className="home-button2 button-clean button">
-              Rewards
-              </a>
-            
             {isConnected && 
             <div><a href="/multiple" className="home-button2 button-clean button">
               Multiple Transaction
