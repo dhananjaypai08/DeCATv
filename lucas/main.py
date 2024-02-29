@@ -4,7 +4,7 @@ import json
 # Fastapi imports
 from fastapi import FastAPI, Request, Response
 from fastapi.responses import FileResponse
-from config import Node, Contract
+from config import Node, Contract, Google
 import uvicorn
 from middleware.TimeMiddleware import TimeMiddleware
 from fastapi.middleware.cors import CORSMiddleware
@@ -14,6 +14,7 @@ from io import BytesIO
 import qrcode
 import cv2
 from pyzbar.pyzbar import decode
+import google.generativeai as genai
 
 w3 = None
 contractwithsigner = None
@@ -36,6 +37,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+api_key = Google().api_key
+genai.configure(api_key=api_key)
 
 async def read_json():
     file = open(contract.abi_path)
@@ -148,6 +152,10 @@ async def scanQR():
     cap.release()
     cv2.destroyAllWindows()
     return Response("QRCode not detected")
+
+@app.route("/getCasualInsights")
+async def getInsights(address: str):
+    return address
 
 if __name__ == "__main__":
     uvicorn.run("main:app", port=8082, log_level="info", reload=True)
