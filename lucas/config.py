@@ -8,9 +8,15 @@ class Contract:
     def __init__(self):
         self.name = "DeCAT"
         self.inherits = "ERC721"
-        self.address = "0x61eFE56495356973B350508f793A50B7529FF978"
-        self.abi_path = "../src/contracts/decat.json"
+        self.address = "0x8264a7B7d02ab5eF1e57d0ad10110686D79d8d46"
+        self.abi_path = "../src/contracts/Autocrate.json"
     
 class Google:
     def __init__(self):
-        self.api_key = "AIzaSyA652ybiYvXVkSYieJgT8VynRauQlxuEbA"
+        self.api_key = 'AIzaSyA652ybiYvXVkSYieJgT8VynRauQlxuEbA'
+        
+class Test:
+    def __init__(self):
+        self.name = "DeCAT"
+        self.inherits = "ERC721"
+        self.address = "0x61eFE56495356973B350508f793A50B7529FF978"

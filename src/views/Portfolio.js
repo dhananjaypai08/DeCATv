@@ -5,7 +5,7 @@ import { Helmet } from "react-helmet";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { Redirect } from 'react-router-dom'
-import abi from "../contracts/decat.json";
+import abi from "../contracts/Autocrate.json";
 //import './App.css';
 import { ethers } from "ethers";
 
@@ -25,12 +25,18 @@ const Portfolio = () => {
   const [endorsed_mints, setEndorsingData] = useState([]);
   const [get_endorsed_cids, setEndorsedCid] = useState([]);
   const [total_endorsed_mints, setEndorsedMints] = useState("Please Enter an address first");
+  const [selectedData, setSelectedData] = useState();
+  const [qrcode, setQRcode] = useState("");
+  const [qrcodegenerated, setQRcodeStatus] = useState(false);
+  const [selectedIndex, setIndex] = useState("");
+  const [casualInsights, setCasualInsights] = useState();
+  const [CIflag, setCIflag] = useState(false);
 
   const nftipfsAddress = "https://gateway.lighthouse.storage/ipfs/";
 
   useEffect(() => {
     const connectWallet = async () => {
-      const contractAddress = "0x61eFE56495356973B350508f793A50B7529FF978";//"0xe8750E54151a8eA203ef65e0fB11230676b9b033";
+      const contractAddress = "0x8264a7B7d02ab5eF1e57d0ad10110686D79d8d46"//"0x816df2a69bB2D246B1ee5a4F2d1B3EbcB3aF7C85";//"0x61eFE56495356973B350508f793A50B7529FF978";
       const contractAbi = abi.abi;
       try {
         const { ethereum } = window;
@@ -71,13 +77,14 @@ const Portfolio = () => {
 
   const getNFT = async(event) => {
     event.preventDefault();
+    setQRcodeStatus(false);
     console.log(contract, signer);
     if(contract != undefined && signer!=undefined){
         const address = document.querySelector('#walletaddress').value;
         const contractwithsigner = contract.connect(signer);
         const resp = await contractwithsigner.total_sbt_received_from_org(address);
         setAddressMints(resp.toNumber());
-        const endorsedmints = await contractwithsigner.getEndorsementsReceived(address);
+        const endorsedmints = await contractwithsigner.getSharingReceived(address);
         setEndorsedMints(endorsedmints.toNumber())
         // const client = new CovalentClient("cqt_rQt3xrBGR96Gg3bp7qk7vGJDQ8rV");
         // const response = await client.BalanceService.getTokenBalancesForWalletAddress("eth-sepolia",address, {"nft": true});
@@ -86,29 +93,31 @@ const Portfolio = () => {
         const nfts = await contractwithsigner.getTokenIdAccount(address);
         let nft_datas = []
         for(var i=0;i<nfts.length;i++){
-          const tokenId = nfts[i].toNumber();
-          const ipfs_cid = await contractwithsigner.tokenURI(tokenId);
-          console.log(ipfs_cid);
-          try{
-            await axios.get(nftipfsAddress+ipfs_cid).then((metadata) => {
-              nft_datas.push(metadata.data);
-            });
-          } catch(e){
-            console.log('something went wrong');
-          }
+          // const tokenId = nfts[i].toNumber();
+          // const ipfs_cid = await contractwithsigner.tokenURI(tokenId);
+          // console.log(ipfs_cid);
+          // try{
+          //   await axios.get(nftipfsAddress+ipfs_cid).then((metadata) => {
+          //     nft_datas.push(metadata.data);
+          //   });
+          // } catch(e){
+          //   console.log('something went wrong');
+          // }
+          nft_datas.push({"name": nfts[i].name, "description": nfts[i].description, "image": nftipfsAddress+nfts[i].imageuri, "tokenId": nfts[i].tokenId.toNumber(), "walletAddress": address});
           
         }
-        const endorsed_nfts = await contractwithsigner.getTokenIdAccountEndorsing(address);
+        const endorsed_nfts = await contractwithsigner.getTokenIdAccountSharing(address);
         let endorsed = [];
         let endorsed_ipfs = [];
         for(var i=0;i<endorsed_nfts.length;i++){
-          const tokenId = endorsed_nfts[i].toNumber();
+          const tokenId = endorsed_nfts[i].tokenId.toNumber();
           const ipfs_endorsed = await contractwithsigner.tokenURI(tokenId);
-          console.log(ipfs_endorsed);
-          await axios.get(nftipfsAddress+ipfs_endorsed).then((metadata) => {
-            endorsed_ipfs.push(ipfs_endorsed);
-            endorsed.push(metadata.data);
-          });
+          endorsed.push({"name": endorsed_nfts[i].name, "description": endorsed_nfts[i].description, "image": nftipfsAddress+nfts[i].imageuri, "tokenId": nfts[i].tokenId.toNumber()});
+          // console.log(ipfs_endorsed);
+          // await axios.get(nftipfsAddress+ipfs_endorsed).then((metadata) => {
+          //   endorsed_ipfs.push(ipfs_endorsed);
+          //   endorsed.push(metadata.data);
+          // });
         }
         console.log(nft_datas);
         setEndorsingData(endorsed);
@@ -116,10 +125,35 @@ const Portfolio = () => {
         setNFT(true);
         setNFTData(nft_datas);
         setLoader(false);
-    } else{alert("Please connect to you metamask wallet");}
+        const casualInsightsdata = await axios.post("http://localhost:8082/getCasualInsights", nft_datas
+        );
+        setCasualInsights(casualInsightsdata.data);
+        setCIflag(true);
+    } else{alert("Please connect to your metamask wallet");}
     event.target.reset();
   }
     
+  const handleButtonClick = async(index) => {
+    try {
+      const response = await axios.post('http://localhost:8082/generate_qrcode', nft_data[index], {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      if(response.status == 200){
+        console.log(response.data, response);
+        setQRcode(response.data);
+        setQRcodeStatus(true);
+        setSelectedData(nft_data[index]);
+        setIndex(index);
+      }
+      else{
+        console.log('something went wrong')
+      }
+    } catch (error) {
+      console.error('Error during POST request:', error.message);
+    }
+  };
   
   return (
     <div className="home-container">
@@ -208,57 +242,73 @@ const Portfolio = () => {
         </div>
       </header>
       <div className="home-hero">
-      <label className='home-button7 button'>Total DeCAT NFT's Minted: {address_mints}
+      <label className='home-button7 button'>Total DeCAT NFT's Minted to your account: {address_mints}<br></br>
+      Total DeCAT NFT's Shared to your wallet: {total_endorsed_mints}
       </label>
-      <label className='home-button7 button'>Total DeCAT NFT's Endorsed to you: {total_endorsed_mints}</label>
       </div>
-      
-      
-      <section className="home-hero">
-       
-    <div class="home-hero">
-      <label className='home-button7 button'>Total NFT's Received from DeCAT: {address_mints}
+      <label className='home-button7 button'>Total NFT's Received from DeCAT ORG: {address_mints}
       </label>
+      
+    <div class="home-container">
+      {qrcodegenerated && 
+      <div className="home-card" style={{width: 700}}>
+      <li className="home-paragraph">QRcode generated as verifiable proof
+      <img src={qrcode} className="home-image06" ></img>
+      </li>
+      </div>
+      }
     </div>
-
     <form onSubmit={getNFT}>
-      <div className="home-buttons" style={{width: 300}}>
-        <label className='home-links' style={{color: "white"}}>Wallet Address</label>
-         <input type="text" id="walletaddress" style={{width: 300}} className="button"></input>
-         <br></br><br></br>
+      <div className="home-container" style={{width: 300}}>
+        <label className='home-links' style={{color: "white"}}>Enter Wallet Address</label>
+         <input type="text" id="walletaddress" style={{width: 300}} className="button" required></input>
+        
          <button type="submit" className='home-button6 button'>Get NFT</button>
-         {loader && <div><label className='home-links' style={{color: "white"}}>Fetching SBT...</label><div className="loader"></div></div>}
       </div>
+      {loader && <div><label className='home-links' style={{color: "white"}}>Fetching SBT...</label><div className="loader"></div></div>}
     </form>
+    
+      <section className="home-hero">
 
     <div className="home-container">
+    {CIflag &&
+    <ul className="flex-container">
+          <div className="home-card SBT" style={{width: 700}}>
+          <li className="home-paragraph">{casualInsights}
+          </li>
+          <br></br>
+          </div>
+        </ul>}
     <label className='home-button7 button'>DeCAT SBT's minted to your account
-      </label>
+    </label>
         <ul className="flex-container">{fetched_nftdata && 
-        nft_data.map(nft => (
+        nft_data.map((nft, index) => (
         <>
-          <div className="home-card" style={{width: 700}}>
+          <div className="home-card SBT" style={{width: 700}}>
           <li className="home-paragraph">{nft.name}: <br></br>{nft.description}
           <img src={nft.image} className="home-image06" ></img>
           </li>
           <br></br>
+          {<button className='home-button6 button' onClick={() => handleButtonClick(index)}>Generate Proof</button>}
           </div>
         </>
         ))}
         </ul>
+      
     </div>
 
     <div className="home-container">
-    <label className='home-button7 button'>DeCAT SBT's endorsed to your account
+    <label className='home-button7 button'>DeCAT SBT's shared to your account
       </label>
         <ul className="flex-container">{fetched_nftdata && 
-        endorsed_mints.map(nft => (
+        endorsed_mints.map((nft,index) => (
         <>
-          <div className="home-card" style={{width: 700}}>
+          <div className="home-card SBT" style={{width: 700}}>
           <li className="home-paragraph">{nft.name}: <br></br>{nft.description}
           <img src={nft.image} className="home-image06" ></img>
           </li>
           <br></br>
+          {<button className='home-button6 button' onClick={() => handleButtonClick(index)}>Generate Proof</button>}
           </div>
         </>
         ))}

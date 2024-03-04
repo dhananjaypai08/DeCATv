@@ -3,173 +3,107 @@ import React from "react";
 import Script from "dangerous-html/react";
 import { Helmet } from "react-helmet";
 import { useState, useEffect } from "react";
+import axios from "axios";
 import { Redirect } from 'react-router-dom'
 import abi from "../contracts/Autocrate.json";
 //import './App.css';
 import { ethers } from "ethers";
-import axios from "axios";
 
 import "./home.css";
-import Loginsystem from "./login";
-import Share from "./Share";
-import { useAppContext } from "../AppContext";
+// import { useAppContext } from "../AppContext";
+// import { CovalentClient } from "@covalenthq/client-sdk";
 
-// import Express from "express";
-// const cors = require('cors');
-// const app = Express();
-
-app.use(cors());
-
-const Home = (props) => {
-  const { state, setState } = useAppContext()
-  const { provider, signer, contract, account, authenticated } = state;
-  const [isConnected, setConnection] = useState(false);
-  const [connectmsg, setMsg] = useState("Connect Wallet");
-  // const [addresses, setAddresses] = useState([]);
-  const [totalmints, setMints] = useState(0);
-  const [nft_data, setNFTData] = useState([]);
+const Sharing = () => {
+  // const { state, setState } = useAppContext()
+  // const { provider, signer, contract, account, authenticated } = state;
+  // const [isConnected, setConnection] = useState(false);
+  // const [connectmsg, setMsg] = useState("Connect Wallet");
+  const [address, setAddress] = useState();
+  const [contract, setNewContract] = useState();
+  // const [totalmints, setMints] = useState(0);
+  const [signer, setSigner] = useState();
+  const [address_mints, setAddressMints] = useState("Please Enter an address first");
+  const [nft_data, setNFTData] = useState([])
   const [fetched_nftdata, setNFT] = useState(false);
-  const [get_nft_cids, setNftCID] = useState([]);
-  const [endorsed_mints, setEndorsingData] = useState([]);
-  const [get_endorsed_cids, setEndorsedCid] = useState([]);
-  const [total_endorsements, setTotalEndorsements] = useState(0);
-  const [ipfs_hash, setHash] = useState();
-  const [endorsementsAllowed, setEndorsementsAllowed] = useState(0);
-  const [admin, setAdmin] = useState(false);
-  const [selectedData, setSelectedData] = useState();
-  const [verified, setVerified] = useState();
-  const [verifiedURI, setVerifiedURI] = useState();
-  const [verifiedData, setVerifiedData] = useState();
 
-  const nftipfsAddress = "https://gateway.lighthouse.storage/ipfs/";
+  useEffect(() => {
+    const connectWallet = async () => {
+      const contractAddress = "0x681a204B065604B2b2611D0916Dca94b992f0B41"//"0x816df2a69bB2D246B1ee5a4F2d1B3EbcB3aF7C85";//"0x61eFE56495356973B350508f793A50B7529FF978";
+      const contractAbi = abi.abi;
+      try {
+        const { ethereum } = window;
+        if (ethereum) {
+          ethereum.on("chainChanged", () => {
+            window.location.reload();
+          });
+          ethereum.on("accountsChanged", () => {
+            window.location.reload();
+          });
+          const accounts = await ethereum.request({
+            method: "eth_requestAccounts",
+          });
+          const account = accounts[0];
+          setAddress(account);
+          const provider = new ethers.providers.Web3Provider(window.ethereum);
 
-  const checkConnectionBeforeConnecting = () => {
-    if(!isConnected){
-      connectWallet();
-    }
-  }
-  
-  const connectWallet = async () => {
-    const contractAddress = "0x8264a7B7d02ab5eF1e57d0ad10110686D79d8d46"//"0x681a204B065604B2b2611D0916Dca94b992f0B41"//"0x816df2a69bB2D246B1ee5a4F2d1B3EbcB3aF7C85";//"0x61eFE56495356973B350508f793A50B7529FF978"
-    const contractAbi = abi.abi;
-    try {
-      const { ethereum } = window;
-      if (ethereum) {
-        ethereum.on("chainChanged", () => {
-          window.location.reload();
-        });
-        ethereum.on("accountsChanged", () => {
-          window.location.reload();
-        });
-        const accounts = await ethereum.request({
-          method: "eth_requestAccounts",
-        });
-        const account = accounts[0];
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
+          const signer = provider.getSigner();
 
-        const signer = provider.getSigner();
-
-        const contract = new ethers.Contract(
-          contractAddress,
-          contractAbi,
-          signer
-        );
-        const authenticated = false;
-        console.log(account)
-        setState({ provider, signer, contract, account, authenticated });
-        setConnection(true);
-        const contractwithsigner = contract.connect(signer);
-        const pass = await contractwithsigner.creds(account);
-        if(pass !== undefined && pass !== ""){
-          setAdmin(true);
+          const contract = new ethers.Contract(
+            contractAddress,
+            contractAbi,
+            signer
+          );
+          const authenticated = false;
+          setNewContract(contract);
+          setSigner(signer);
+          setState({ provider, signer, contract, account, authenticated });
+          setConnection(true);
+          setMsg(account);
         }
-        setMsg(account);
-        const resp = await contractwithsigner.getTotalMints();
-        const mints = resp.toNumber()
-        setMints(mints);
-        const endorsements_total = await contractwithsigner.total_endorsements();
-        setTotalEndorsements(endorsements_total.toNumber());
-        const nfts = await contractwithsigner.getTokenIdAccount(account);
-        console.log('all nfts fetched');
-        let nft_datas = [];
-        let ipfs_cids = [];
+      } catch (error) {
+        console.log(error);
+      }
+  };
+  connectWallet();
+  }, []);
+
+  const getNFT = async(event) => {
+    event.preventDefault();
+    console.log(contract, signer);
+    if(contract != undefined && signer!=undefined){
+        const address = document.querySelector('#walletaddress').value;
+        const contractwithsigner = contract.connect(signer);
+        const resp = await contractwithsigner.total_sbt_received_in_account(address);
+        setAddressMints(resp.toNumber());
+        // const client = new CovalentClient("cqt_rQt3xrBGR96Gg3bp7qk7vGJDQ8rV");
+        // const response = await client.BalanceService.getTokenBalancesForWalletAddress("eth-sepolia",address, {"nft": true});
+        // console.log(response.data["items"], response.data["items"].length);
+        const nfts = await contractwithsigner.getTokenIdAccount(address);
+        let nft_datas = []
         for(var i=0;i<nfts.length;i++){
-          const tokenId = nfts[i].tokenId.toNumber();
+          const tokenId = nfts[i].toNumber();
           const ipfs_cid = await contractwithsigner.tokenURI(tokenId);
           console.log(ipfs_cid)
-          ipfs_cids.push(ipfs_cid);
-          nft_datas.push({"name": nfts[i].name, "description": nfts[i].description, "image": nftipfsAddress+nfts[i].imageuri})
-          // await axios.get(nftipfsAddress+ipfs_cid).then((metadata) => {
-          //   ipfs_cids.push(ipfs_cid);
-          //   nft_datas.push(metadata.data);
-          // });
+          await axios.get(`https://ipfs.io/ipfs/${ipfs_cid}`).then((metadata) => {
+            nft_datas.push(metadata.data);
+          });
         }
-        console.log(nft_datas);
-        const endorsed_nfts = await contractwithsigner.getTokenIdAccountSharing(account);
-        let endorsed = [];
-        let endorsed_ipfs = [];
-        for(var i=0;i<endorsed_nfts.length;i++){
-          const tokenId = endorsed_nfts[i].tokenId.toNumber();
-          const ipfs_endorsed = await contractwithsigner.tokenURI(tokenId);
-          endorsed_ipfs.push(ipfs_endorsed);
-          endorsed.push({"name": endorsed_nfts[i].name, "description": endorsed_nfts[i].description, "image": nftipfsAddress+endorsed_nfts[i].imageuri})
-          // await axios.get(nftipfsAddress+ipfs_endorsed).then((metadata) => {
-          //   endorsed_ipfs.push(ipfs_endorsed);
-          //   endorsed.push(metadata.data);
-          // });
-        }
+        console.log(nft_datas)
         setNFT(true);
-        setNftCID(ipfs_cids);
         setNFTData(nft_datas);
-        setEndorsingData(endorsed);
-        setEndorsedCid(endorsed_ipfs);
-        const response = await contractwithsigner.GetSharingAllowed(account);
-        const endorsements_allowed = response.toNumber();
-        setEndorsementsAllowed(endorsements_allowed);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  
-  const handleButtonClick = (index) => {
-    if(endorsementsAllowed<1){
-      alert("You are not allowed to make any endorsements");
-    }else{
-      setHash(get_nft_cids[index]);
-      setSelectedData(nft_data[index]);
-    }
-  };
-
-  const Verify = async() => {
-    const response = await axios.post('http://localhost:8082/scanQR');
-    // console.log(response.data["verified"], response.data["uri"]);
-    if(response.data["verified"] == true){
-      const getdata = await getVerificationData(response.data["uri"]);
-      setVerifiedData(getdata.data);
-      setVerified(response.data["verified"]);
-      setVerifiedURI(response.data["tokenId"]);
-      console.log(getdata);
-    } else{
-      setVerified(response.data["verified"]);
-    }
-  };
-
-  const getVerificationData = async(uri) =>{
-    return await axios.get(nftipfsAddress+uri)
+    } else{alert("Please connect to you metamask wallet");}
+    event.target.reset();
   }
-
+    
+  
   return (
     <div className="home-container">
       <Helmet>
-        <title>Home</title>
+        <title>Portfolio</title>
         <meta property="og:title" content="Dashboard" />
-        <link href="https://db.onlinewebfonts.com/c/974bd878107a4b17fbb34db4029679e9?family=Clepto+Regular" rel="stylesheet"></link>
       </Helmet>
       <header data-thq="thq-navbar" className="home-navbar">
-        <span className="home-logo"><a  href="/">
-              DeCAT
-            </a></span>
+        <span className="home-logo">DeCAT</span>
         <div
           data-thq="thq-navbar-nav"
           data-role="Nav"
@@ -180,25 +114,42 @@ const Home = (props) => {
             data-role="Nav"
             className="home-nav"
           >
-            {isConnected && 
-            <div><a href="/multiple" className="home-button2 button-clean button">
+            <button className="home-button button-clean button">About</button>
+            <a  href="/decat" className="home-button1 button-clean button">
+              Single Transaction
+            </a>
+            <a href="/multiple" className="home-button2 button-clean button">
               Multiple Transaction
             </a>
-            
-            <a href="/portfolio" className="home-button2 button-clean button">
-              Portfolio
+            <a href="/" className="home-button2 button-clean button">
+              Home
             </a>
-            <a href="/reputation" className="home-button2 button-clean button">
-              Reputation
-            </a></div>}
+            <button className="home-button3 button-clean button">Team</button>
           </nav>
         </div>
         <div data-thq="thq-navbar-btn-group" className="home-btn-group">
+          <div className="home-socials">
+            {/* <button className="social button">
+              <img
+                alt="image"
+                src="/Icons/twitter.svg"
+                className="home-image"
+              />
+            </button>
+            <button className="social button">
+              <img
+                alt="image"
+                src="/Icons/discord.svg"
+                className="home-image01"
+              />
+            </button> */}
+          </div>
           
-          <button onClick={checkConnectionBeforeConnecting} className="button wallet-btn">
+          {/* <button onClick={!isConnected && connectWallet} className="button">
             {connectmsg}
-          </button>
+          </button> */}
         </div>
+        
         <div data-thq="thq-burger-menu" className="home-burger-menu">
           <button className="button home-button5">
             <svg viewBox="0 0 1024 1024" className="home-icon">
@@ -225,10 +176,15 @@ const Home = (props) => {
               data-role="Nav"
               className="home-nav2"
             >
+              <span className="home-text">About</span>
+              <a  href="/decat" className="home-button1 button-clean button">
+              Single Transaction
+            </a>
             <a href="/multiple" className="home-button2 button-clean button">
               Multiple Transaction
             </a>
-
+              <span className="home-text03">Team</span>
+              <span className="home-text04">Blog</span>
             </nav>
             <div className="home-container2">
               <button className="home-login button">Login</button>
@@ -248,93 +204,91 @@ const Home = (props) => {
           </div>
         </div>
       </header>
-      <button className='home-button6 button' onClick={() => Verify()}>Verify Credentials/Proofs</button>
-    {verified!==undefined && <ul className="home-cards">
-      {verified==true &&
-      <div className="home-card">
-          <li className="home-paragraph">The NFT with tokenId: {verifiedURI} is <h3>verified</h3>
-          Name: {verifiedData["name"]} <br></br> Description: {verifiedData["description"]} <br></br> TokenId: {verifiedData["tokenId"]}
-          <img src={verifiedData["image"]} className="home-image05" ></img>
-          </li>
+      <div className="home-hero">
+      <label className='home-button7 button'>Total DeCAT NFT's Minted: {address_mints}
+      </label>
       </div>
-      }
-      {verified==false &&
-      <div className="home-card" style={{width: 700}}>
-          <li className="home-paragraph">The NFT with Hash: {verifiedURI} is <h3>NOT Verified</h3>
-          </li>
-      </div>
-      }
-      </ul>}
       
-      {isConnected && <><label className='mint-btn'>Total DeCAT's Minting Volume: {totalmints}
-      </label> <label className='mint-btn'>Total DeCAT's Shared Volume: {total_endorsements}</label><br></br></>}
-      {isConnected && admin && <Loginsystem></Loginsystem>}
+      
       <section className="home-hero">
-      
-      {!isConnected && <div className="home-heading">
-          <h1 className="home-header">Store. Share. Succeed</h1>
+        <div className="home-heading">
+          <h1 className="home-header">Leveraging Modified Soul Bound Tokens</h1>
           <p className="home-caption">
-          Decentralized Identity Verification and storage system.
+            Decentralized Certificate Authority - A Non Fungible Token based
+            Dapp for Certificate Authorization
           </p>
-        </div>}
+        </div>
         <div className="home-buttons">
-          {/* <button onClick={checkConnectionBeforeConnecting} className="button">
+          {/* <button onClick={!isConnected && connectWallet} className="button">
             {connectmsg}
           </button> */}
-          
+          <button className="home-learn button-clean button">Learn more</button>
         </div>
-      </section>
-      <section className="home-description">
-      {isConnected && <div className="home-container">
-      <p className="caption">
-          Your DeCAT Profile:
-      </p>
-      <label className='home-button7 button'>Total DeCAT Sharings allowed: {endorsementsAllowed}</label>
-        <label className='home-button7 button'>DeCAT SBT's minted to your account
-        </label>
-        <ul>{fetched_nftdata && 
-        nft_data.map((nft, index) => (
-        <>
-          <div className="home-card" style={{width: 700}} key={index}>
-          <li className="home-paragraph">{nft.name}: <br></br>{nft.description}
-          <img src={nft.image} className="home-image06" ></img>
-          </li>
-          {ipfs_hash !== get_nft_cids[index] && <button className='home-button6 button' onClick={() => handleButtonClick(index)}>Share</button>}
-          {ipfs_hash == get_nft_cids[index] && <Share passedValue={ipfs_hash} data={selectedData}></Share>}
-          </div>
-          </>
-        ))}
-        </ul>
-    </div>}
-    
-    {isConnected && <div className="home-container">
-      <label className='home-button7 button'>DeCAT SBT's shared to your account
+
+    <div class="home-hero">
+      <label className='home-button7 button'>Total NFT's Received from DeCAT: {address_mints}
       </label>
+    </div>
+
+    <form onSubmit={getNFT}>
+      <div className="home-buttons" style={{width: 300}}>
+        <label className='home-links' style={{color: "white"}}>Wallet Address</label>
+         <input type="text" id="walletaddress" style={{width: 300}} className="button"></input>
+         <br></br><br></br>
+         <button type="submit" className='home-button6 button'>Get NFT</button>
+      </div>
+    </form>
+
+    <div className="home-container">
         <ul>{fetched_nftdata && 
-        endorsed_mints.map((nft, index) => (
+        nft_data.map(nft => (
         <>
-          <div className="home-card" style={{width: 700}} key={index}>
+          <div className="home-card" style={{width: 700}}>
           <li className="home-paragraph">{nft.name}: <br></br>{nft.description}
           <img src={nft.image} className="home-image06" ></img>
           </li>
           <br></br>
-
           </div>
-          </>
+        </>
         ))}
         </ul>
-    </div>}
+      </div>
+
+      </section>
+      <section className="home-description">
         <img
           alt="image"
           src="/hero-divider-1500w.png"
           className="home-divider-image"
         />
-        
+        <div className="home-container3">
+          <div className="home-description01">
+            <div className="home-content">
+              <p className="home-paragraph">
+                We are a team of web3 enthusiasts passionate about building
+                Systems that would not only revolutionize the world But also
+                shape the world into a better future.
+              </p>
+              <p className="home-paragraph1">
+                DeCAT is set to release on public blockchain Layer2. The first
+                working model is set to be deployed on Polygon mumbai testnet.
+                Why Polygon? Provides scalability enabling rollup mechanism
+                which plays a critical role in multibatch transactions.
+              </p>
+            </div>
+          </div>
+        </div>
       </section>
-      {!isConnected && <section className="home-cards">
+      <section className="home-cards">
         <div className="home-row">
           <div className="home-card">
-            
+            <div className="home-avatar">
+              <img
+                alt="image"
+                src="/Avatars/avatar.svg"
+                className="home-avatar1"
+              />
+            </div>
             <div className="home-main">
               <div className="home-content01">
                 <h2 className="home-header01">
@@ -349,39 +303,93 @@ const Home = (props) => {
                   value and authenticity in the digital world.
                 </p>
               </div>
+              <button className="home-learn1 button">
+                <span className="home-text07">Learn more</span>
+                <img
+                  alt="image"
+                  src="/Icons/arrow.svg"
+                  className="home-image02"
+                />
+              </button>
             </div>
           </div>
           <div className="home-card01">
-            
+            <div className="home-avatar2">
+              <img
+                alt="image"
+                src="/Avatars/default-avatar.svg"
+                className="home-avatar3"
+              />
+            </div>
             <div className="home-main1">
               <div className="home-content02">
                 <h2 className="home-header02">
-                  DeCAT: Decentralized Identity verification and storage system
+                  DeCAT : provides digital and decentralized certification
+                  authority
                 </h2>
                 <p className="home-description03">
-                  Ensuring the authenticity and uniqueness of certificates,
+                  ensuring the authenticity and uniqueness of certificates,
                   achievements, and credentials has become a critical concern.
                   Traditional methods are susceptible to duplication and
                   tampering, diminishing the value of these accolades. To
-                  address this issue, we aim to create a Dapp that leverages 
-                  modified ERC721 tokens inspired by SoulBound Tokens.
+                  address this issue, we aim to create a decentralized
+                  application (Dapp) that leverages modified ERC721 tokens
+                  inspired by SoulBound Tokens.
                 </p>
               </div>
-              
+              <button className="home-learn2 button">
+                <span className="home-text08">Learn more</span>
+                <img
+                  alt="image"
+                  src="/Icons/arrow-2.svg"
+                  className="home-image03"
+                />
+              </button>
             </div>
           </div>
         </div>
-               
-        
-      </section>}
+        <div className="home-card02">
+          <div className="home-avatar4">
+            <img
+              alt="image"
+              src="/Avatars/light-avatar.svg"
+              className="home-avatar5"
+            />
+          </div>
+          <div className="home-row1">
+            <div className="home-main2">
+              <div className="home-content03">
+                <h2 className="home-header03">
+                  Dive Deep into the world of Blockchain
+                </h2>
+                <p className="home-description04">
+                  Learn about Rollup mechanism, Layer protocols in Blockchain,
+                  Multi batch and bulk transaction processing and many more
+                  research things.
+                </p>
+              </div>
+              <button className="home-learn3 button">
+                <span className="home-text09">Learn more</span>
+                <img
+                  alt="image"
+                  src="/Icons/arrow-2.svg"
+                  className="home-image04"
+                />
+              </button>
+            </div>
+            <img alt="image" src="/group%202262.svg" className="home-image05" />
+          </div>
+        </div>
+      </section>
 
       <footer className="home-footer">
         <div className="home-main5">
           <div className="home-branding">
             <div className="home-heading10">
-              <h2 className="home-logo2">ZKBuilders</h2>
+              <h2 className="home-logo2">Character</h2>
               <p className="home-caption17">
-              Empower your professional journey with Autocrate. Join us in creating a job market where trust is inherent, and your identity is truly yours. Let's build a decentralized future together.
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+                eiusmod tempor incididunt ut labore et dolore.
               </p>
             </div>
             <div className="home-socials1">
@@ -478,7 +486,7 @@ const Home = (props) => {
           </div>
         </div>
         <span className="home-copyright">
-          © 2023 Character. All Rights Reserved.
+          © 2022 Character. All Rights Reserved.
         </span>
       </footer>
       <div>
@@ -490,4 +498,4 @@ const Home = (props) => {
   );
 };
 
-export default Home;
+export default Sharing;

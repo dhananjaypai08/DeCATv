@@ -2,7 +2,7 @@
 from web3 import Web3, AsyncWeb3
 import json
 # Fastapi imports
-from fastapi import FastAPI, Request, Response
+from fastapi import FastAPI, Request, Response, Query, Body
 from fastapi.responses import FileResponse
 from config import Node, Contract, Google
 import uvicorn
@@ -15,6 +15,9 @@ import qrcode
 import cv2
 from pyzbar.pyzbar import decode
 import google.generativeai as genai
+from dataclasses import dataclass
+import cloudinary 
+import cloudinary.uploader
 
 w3 = None
 contractwithsigner = None
@@ -27,6 +30,7 @@ Lighthouse_GATEWAY_URL = "https://gateway.lighthouse.storage/ipfs/"
 origins = [
     "http://localhost",
     "http://localhost:8082",
+    Lighthouse_GATEWAY_URL,
     "*"
 ]
 
@@ -40,6 +44,20 @@ app.add_middleware(
 
 api_key = Google().api_key
 genai.configure(api_key=api_key)
+model = genai.GenerativeModel('gemini-pro')
+
+cloudinary.config( 
+  cloud_name = "dzvstpvlt", 
+  api_key = "188374828552585", 
+  api_secret = "vMCoE46Phj4zK5k7Bd13NOHuW78" 
+)
+
+@dataclass
+class MetaData:
+    name: str
+    description: str
+    imageuri: str
+    tokenId: int
 
 async def read_json():
     file = open(contract.abi_path)
@@ -63,8 +81,8 @@ async def home(id: str):
     tokenIds = await contractwithsigner.functions.getTokenIdAccount(id).call()
     ans = []
     for tokenId in tokenIds:
-        tokenURI = await contractwithsigner.functions.tokenURI(tokenId).call()
-        ans.append({"tokenId": tokenId, "tokenURI": Lighthouse_GATEWAY_URL+tokenURI})
+        tokenURI = await contractwithsigner.functions.tokenURI(tokenId[3]).call()
+        ans.append({"tokenId": tokenId[3], "tokenURI": Lighthouse_GATEWAY_URL+tokenURI})
     logger.success(f"Fetched SBT data for wallet address: {id}")
     return ans
 
@@ -74,16 +92,16 @@ async def home(id: str):
     logger.info("Data Retrieved")
     ans = []
     for tokenId in ids:
-        tokenURI = await contractwithsigner.functions.tokenURI(tokenId).call()
-        ans.append({"tokenId": tokenId, "tokenURI": Lighthouse_GATEWAY_URL+tokenURI})
-    logger.success(f"Fetched endorsing data for wallet address: {id}")
+        tokenURI = await contractwithsigner.functions.tokenURI(tokenId[3]).call()
+        ans.append({"tokenId": tokenId[3], "tokenURI": Lighthouse_GATEWAY_URL+tokenURI})
+    logger.success(f"Fetched endorsing data for wallet address: {tokenId[3]}")
     return ans
 
 @app.post("/generate_qrcode")
 async def generate(request: Request):
     data = await request.json()
     str_data = json.dumps(data)
-    print(type(str_data))
+    print(str_data, type(str_data))
     qr = qrcode.QRCode(
         version=1,
         error_correction=qrcode.constants.ERROR_CORRECT_L,
@@ -93,14 +111,19 @@ async def generate(request: Request):
     qr.add_data(str_data)
     qr.make(fit=True)
     img = qr.make_image(fill_color="black", back_color="white")
-    img.save("qrcode.png")
-    return FileResponse("qrcode.png", media_type="application/octet-stream", filename="qrcode.png")
+    image_stream = BytesIO()
+    img.save(image_stream, format="PNG")
+    image_stream.seek(0)
+    result = cloudinary.uploader.upload(image_stream,public_id='qrcode')
+    return result["secure_url"]
+    # return FileResponse("qrcode.png", media_type="application/octet-stream", filename="qrcode.png")
 
 @app.post("/scanQR")
 async def scanQR():
     cap = cv2.VideoCapture(0)
     found_qr_data = False
     verified_data = False
+    res = {}
     while True:
         ret, frame = cap.read()
 
@@ -117,20 +140,27 @@ async def scanQR():
             found_qr_data = True
             typeofSBT = dict_data["name"]
             address = dict_data["walletAddress"]
-            URI = dict_data["tokenURI"]
-            logger.info(f"Fetched type: {typeofSBT}, address: {address}, URI: {URI}")
-            if typeofSBT == "DeCAT":
+            tokenId = dict_data["tokenId"]
+            logger.info(f"Fetched type: {typeofSBT}, address: {address}, TokenId: {str(tokenId)}")
+            flg = 0
+            if flg == 0:
                 tokenIds = await contractwithsigner.functions.getTokenIdAccount(address).call()
+                print(tokenIds)
                 for id in tokenIds:
-                    uri = await contractwithsigner.functions.tokenURI(id).call()
-                    if uri == URI: 
+                    # uri = await contractwithsigner.functions.tokenURI(id).call()
+                    # if uri == URI: 
+                    #     verified_data = True
+                    if id[3] == tokenId:
                         verified_data = True
-            elif typeofSBT == "E-DeCAT":
+                        flg = 1
+            elif flg == 0:
                 tokenIds = await contractwithsigner.functions.getTokenIdAccountEndorsing(address).call()
+                print(tokenIds)
                 for id in tokenIds:
-                    uri = await contractwithsigner.functions.tokenURI(id).call()
-                    if uri == URI:
-                        verified_data = True
+                    # uri = await contractwithsigner.functions.tokenURI(id).call()
+                    # if uri == URI:
+                    #     verified_data = True
+                    if id[3] == tokenId: verified_data = True
 
         # Break the loop if 'q' key is pressed
         if (cv2.waitKey(1) & 0xFF == ord('q')):
@@ -143,19 +173,36 @@ async def scanQR():
             cap.release()
             cv2.destroyAllWindows()
             if verified_data:
-                res_string = f"The NFT with tokenURI: {URI} of wallet Address: {address} is Verified"
+                res_string = f"The NFT with tokenId: {str(tokenId)} of wallet Address: {address} is Verified"
+                res["msg"] = res_string
+                res["tokenId"] = tokenId
+                res["verified"] = True
+                res["name"] = dict_data["name"]
+                res["description"] = dict_data["description"]
+                res["image"] = dict_data["image"]
             else:
-                res_string = f"Unfortunately, The NFT with tokenURI: {URI} of wallet Address: {address} is NOT Verified"
-            return Response(res_string)
+                res_string = f"Unfortunately, The NFT with tokenId: {str(tokenId)} of wallet Address: {address} is NOT Verified"
+                res["msg"] = res_string
+                res["verified"] = False
+            data = json.dumps(res)
+            print(data)
+            return Response(data)
 
     # Release the camera and close the window
     cap.release()
     cv2.destroyAllWindows()
     return Response("QRCode not detected")
 
-@app.route("/getCasualInsights")
-async def getInsights(address: str):
-    return address
+@app.post("/getCasualInsights")
+async def getInsights(data: list = Body(...)):
+    if not data: return "Add something to your certificates List"
+    response = model.generate_content("Generate text which should be strictly less 100 words limit and Make sure the generated text is in plain string text and should be without any '*' or neither any other such characters for designing. Generate text about casual Granular statistical overview Insights on this data which signifies all the certificates earned in a particular field : "+str(data)+". The text should contain this data for eg: x percent proficient in y field(example: 50% proficient in python with 2 certificates in python) and the total words of generated words is less than or equal to 100 words.")
+    return response.text
+
+@app.get("/getJobs")
+async def getJobs():
+    response = model.generate_content("How many javascript jobs are available in India today. Just provide an integer value that I can convert to integer directly in python")
+    return response.text
 
 if __name__ == "__main__":
     uvicorn.run("main:app", port=8082, log_level="info", reload=True)
