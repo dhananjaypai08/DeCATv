@@ -52,6 +52,14 @@ cloudinary.config(
   api_secret = "vMCoE46Phj4zK5k7Bd13NOHuW78" 
 )
 
+skills = {
+    "python": 1,
+    "java": 1,
+    "c++": 1,
+    "git": 1,
+    "javascript": 1,
+}
+
 @dataclass
 class MetaData:
     name: str
@@ -201,7 +209,19 @@ async def getInsights(data: list = Body(...)):
 
 @app.get("/getJobs")
 async def getJobs():
-    response = model.generate_content("How many javascript jobs are available in India today. Just provide an integer value that I can convert to integer directly in python")
+    accounts = await contractwithsigner.functions.getAccounts().call()
+    print(accounts)
+    data = {}
+    for account in accounts:
+        metadata = await contractwithsigner.functions.getTokenIdAccount(account).call()
+        data[account] = metadata
+        dataset = []
+        for i in metadata:
+            dataset.append(i[0]+" "+i[1])
+        prompt = "How many skills jobs are available in India today for all the skills mentioned in the given datatset . Just provide the skill name mapped with an integer value(the number of jobs for that skills) that I can convert to dictionary directly in python. The dataset is : "+str(dataset)
+        print(prompt)
+        response = model.generate_content(prompt)
+        break
     return response.text
 
 if __name__ == "__main__":

@@ -14,11 +14,6 @@ import Loginsystem from "./login";
 import Share from "./Share";
 import { useAppContext } from "../AppContext";
 
-// import Express from "express";
-// const cors = require('cors');
-// const app = Express();
-
-app.use(cors());
 
 const Home = (props) => {
   const { state, setState } = useAppContext()
