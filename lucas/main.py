@@ -18,6 +18,7 @@ import google.generativeai as genai
 from dataclasses import dataclass
 import cloudinary 
 import cloudinary.uploader
+import re
 
 w3 = None
 contractwithsigner = None
@@ -52,13 +53,25 @@ cloudinary.config(
   api_secret = "vMCoE46Phj4zK5k7Bd13NOHuW78" 
 )
 
-skills = {
-    "python": 1,
-    "java": 1,
-    "c++": 1,
-    "git": 1,
-    "javascript": 1,
+skills = [
+    "python",
+    "java",
+    "c++",
+    "git",
+    "javascript",
+    "full stack web development",
+    "ai"
+]
+jobs_available = {
+    "python": 100,
+    "java": 75,
+    "c++": 50,
+    "git": 25,
+    "javascript": 40,
+    "full stack web development": 30,
+    "ai": 40
 }
+pattern = "|".join(re.escape(p) for p in skills)
 
 @dataclass
 class MetaData:
@@ -211,18 +224,47 @@ async def getInsights(data: list = Body(...)):
 async def getJobs():
     accounts = await contractwithsigner.functions.getAccounts().call()
     print(accounts)
-    data = {}
+    res = {}
     for account in accounts:
         metadata = await contractwithsigner.functions.getTokenIdAccount(account).call()
-        data[account] = metadata
-        dataset = []
-        for i in metadata:
-            dataset.append(i[0]+" "+i[1])
-        prompt = "How many skills jobs are available in India today for all the skills mentioned in the given datatset . Just provide the skill name mapped with an integer value(the number of jobs for that skills) that I can convert to dictionary directly in python. The dataset is : "+str(dataset)
-        print(prompt)
-        response = model.generate_content(prompt)
-        break
+        metadata_shared = await contractwithsigner.functions.getTokenIdAccountSharing(account).call()
+        data = metadata[:]+metadata_shared[:]
+        for meta in data:
+            matches = re.findall(pattern, meta[0].lower())
+            for skill in matches:
+                res[account] = res.get(account,0)+jobs_available[skill]
+    return list(res.keys()), list(res.values())
+            
+
+@app.get("/getAllJobs")
+async def getAlljobs():
+    lst = str(skills)
+    prompt = f"Get jobs available(openings) in India today for the given list of skills: {lst}. Make sure the generated answer is in the dictionary format where skill is mapped to its integer value indicating the availability such that I can convert the generated data to dictionary easily in python using json.loads function in python to convert the text to dict and without new lines"
+    response = model.generate_content(prompt)
+    print(response.text, type(response.text))
+    global jobs_available
+    try:
+        jobs_available = json.loads(response.text)  # Parse only if valid JSON
+    except json.JSONDecodeError as e:
+        print("Error parsing LLM output:", e)
+    return jobs_available
+
+@app.get("/chat")
+async def chat(query: str):
+    accounts = await contractwithsigner.functions.getAccounts().call()
+    from collections import defaultdict
+    knowledge_base = defaultdict(list)
+    print(accounts)
+    for account in accounts:
+        metadata = await contractwithsigner.functions.getTokenIdAccount(account).call()
+        metadata_shared = await contractwithsigner.functions.getTokenIdAccountSharing(account).call()
+        data = metadata[:]+metadata_shared[:]
+        knowledge_base[account].append(data)
+    knowledge_base = str(knowledge_base)
+    preprocessed_query = f"Web3 data: {knowledge_base} | User query: {query}"
+    response = model.generate_content(preprocessed_query)
     return response.text
+        
 
 if __name__ == "__main__":
     uvicorn.run("main:app", port=8082, log_level="info", reload=True)

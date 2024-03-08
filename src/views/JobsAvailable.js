@@ -7,12 +7,11 @@ import abi from "../contracts/Autocrate.json";
 //import './App.css';
 import { ethers } from "ethers";
 import axios from "axios";
-import { Bar } from "react-chartjs-2"; 
-import Chart from 'chart.js/auto';
+import { Bar, Line, Pie, Doughnut } from "react-chartjs-2"; 
 import "./home.css";
 import { useAppContext } from "../AppContext";
 
-const ReputationSystem = (props) => {
+const JobsAvailable = (props) => {
   const { state, setState } = useAppContext()
   const { provider, signer, contract, account, authenticated } = state;
   const [isConnected, setConnection] = useState(false);
@@ -22,17 +21,20 @@ const ReputationSystem = (props) => {
   const [reputation_score, setReputationScore] = useState([]);
   const [randomBgcolor, setRandomBg] = useState([]);
   const [showGraph, setGraph] = useState(false);
-  const [curr_mints, settotalMints] = useState(0);
-  const [curr_endorsements_received, setEndorsementReceived] = useState(0);
-  const [curr_endorsements_given, setEndorsementGiven] = useState(0);
-  const [curr_reputation, setCurReputation] = useState(0);
+  const [skills, setSkills] = useState();
+  const [skill_name, setSkillname] = useState([]);
+  const [skill_value, setSkillvalue] = useState([]);
+//   const [curr_mints, settotalMints] = useState(0);
+//   const [curr_endorsements_received, setEndorsementReceived] = useState(0);
+//   const [curr_endorsements_given, setEndorsementGiven] = useState(0);
+//   const [curr_reputation, setCurReputation] = useState(0);
   const leaderboardData = accounts.map((account, index) => ({
     account,
     score: reputation_score[index],}))
     leaderboardData.sort((a, b) => b.score - a.score);
   
 
-  const nftipfsAddress = "https://gateway.lighthouse.storage/ipfs/";
+//   const nftipfsAddress = "https://gateway.lighthouse.storage/ipfs/";
   const randomColor = () => `rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, 1)`;
 
   const checkConnectionBeforeConnecting = () => {
@@ -75,35 +77,31 @@ const ReputationSystem = (props) => {
         const resp = await contractwithsigner.getTotalMints();
         const mints = resp.toNumber()
         setMints(mints);
-        const all_accounts = await contractwithsigner.getAccounts();
+        // const all_accounts = await contractwithsigner.getAccounts();
+        const response_skills = await axios.get('http://localhost:8082/getAllJobs');
+        const skills = response_skills.data;
+        console.log(skills);
+        setSkills(skills);
+        const skill_names = Object.keys(skills);
+        const skill_values = Object.values(skills);
+        setSkillname(skill_names);
+        setSkillvalue(skill_values);
+        const response = await axios.get('http://localhost:8082/getJobs');
+        const all_accounts = response.data[0];
+        const all_jobs = response.data[1];
+        setReputationScore(all_jobs);
         setAccounts(all_accounts);
-        let scores = [];
-        let current_mints = 0;
-        let total_acc_score = 0;
-        let score = 0;
-        for(let i = 0; i<all_accounts.length; i++){
-            const sbt_score = await contractwithsigner.repute_score(all_accounts[i]);
-            scores.push(sbt_score.toNumber()/100);
-            console.log(all_accounts[i], account);
-            if(all_accounts[i].toLowerCase() == account){
-              score = sbt_score.toNumber();
-              console.log(score);
-              total_acc_score = score/100;
-              console.log(total_acc_score);
-            }
-        }
-        setReputationScore(scores);
         console.log(all_accounts);
-        console.log(scores);
+        console.log(all_jobs);
         // Generate an array of random background colors
         const randombg = Array.from({ length: all_accounts.length }, () => randomColor());
         setRandomBg(randombg);
         setGraph(true);
-        settotalMints(current_mints);
-        setEndorsementGiven(curr_endorsements_given);
-        setEndorsementReceived(curr_endorsements_received)
-        setCurReputation(total_acc_score);
-        console.log(current_mints, curr_endorsements_given, curr_endorsements_received, total_acc_score);
+        // settotalMints(current_mints);
+        // setEndorsementGiven(curr_endorsements_given);
+        // setEndorsementReceived(curr_endorsements_received)
+        // setCurReputation(total_acc_score);
+        // console.log(current_mints, curr_endorsements_given, curr_endorsements_received, total_acc_score);
       }
     } catch (error) {
       console.log(error);
@@ -113,7 +111,7 @@ const ReputationSystem = (props) => {
   return (
     <div className="home-container">
       <Helmet>
-        <title>Reputation</title>
+        <title>Job Demand Index</title>
         <meta property="og:title" content="Dashboard" />
       </Helmet>
       <header data-thq="thq-navbar" className="home-navbar">
@@ -139,6 +137,9 @@ const ReputationSystem = (props) => {
             </a>
             <a href="/reputation" className="home-button2 button-clean button">
               Reputation
+            </a>
+            <a href="/jobsavailable" className="home-button2 button-clean button">
+              Jobs Demand Index
             </a>
           </nav>
         </div>
@@ -205,28 +206,33 @@ const ReputationSystem = (props) => {
       </section>
       {isConnected && <label className='mint-btn button'>Total DeCAT's Volume: {totalmints}
       </label>}
-      {isConnected && <label className='home-button7 button'>Total SBT's shared to your Account: {curr_endorsements_received} <br></br>
+      {/* {isConnected && <label className='home-button7 button'>Total SBT's shared to your Account: {curr_endorsements_received} <br></br>
       Total SBT's shared by you: {curr_endorsements_given} <br></br>
       Total Reputation Score: {curr_reputation} <br></br>
-      </label>}
-      {isConnected && <span className="reputation-txt">Reputation Chart</span>}
+      </label>} */}
+
+      
+
+      {isConnected && <span className="reputation-txt">Job Demands Index</span>}
       <div className="home-hero">
       {showGraph &&  
-        <span className="reputation-txt">Reputation Chart</span>&&
-        <Bar
+        <span className="reputation-txt">Job Opening Index</span>&&
+        <Line
       data={{ 
         // Name of the variables on x-axies for each bar 
         labels: accounts, 
         datasets: [ 
           { 
-            label: "Score", 
+            label: "Highest on Demand Job skills score", 
             // Data or value of your each variable 
-            data: reputation_score, 
+            // data: reputation_score,
+            data: reputation_score,
             // Color of each bar 
             backgroundColor: randomBgcolor, 
             // Border color of each bar 
             borderColor: 'rgba(0, 0, 0, 1)', 
-            borderWidth: 1.5, 
+            borderWidth: 1.5,
+            fill: true, // Enable fill for area under the line (optional) 
           }, 
         ], 
       }} 
@@ -254,23 +260,86 @@ const ReputationSystem = (props) => {
     /> }
     </div>
 
+    {isConnected && <span className="reputation-txt">Job Opening Doughnut Chart</span>}
+    <div className="home-hero">
+
+    {showGraph && <span className="reputation-txt">Job Opening User score- Doughnut Chart</span> &&
+    <Doughnut
+    data={{
+      labels: accounts,
+      datasets: [
+        {
+          label: "Skill based score",
+          data: reputation_score,
+          backgroundColor: randomBgcolor,
+          borderColor: 'rgba(0, 0, 0, 1)',
+          borderWidth: 1.5,
+        },
+      ],
+    }}
+    height={400}
+    width={2000}
+    options={{
+      // Options specific to doughnut charts (if needed)
+      cutoutPercentage: 60, // Adjust the hole size in the center (default: 50)
+      maintainAspectRatio: false,
+      legend: {
+        labels: {
+          fontSize: 20,
+        },
+      },
+    }}
+  />}
+    </div>
+
+    {isConnected && <span className="reputation-txt">Skills Index</span>}
+    <div className="home-hero">
+    {showGraph && <span className="reputation-txt">Skills Index</span> &&
+    <Pie
+    data={{
+      labels: skill_name,
+      datasets: [
+        {
+          label: "Skills",
+          data: skill_value,
+          backgroundColor: randomBgcolor,
+          borderColor: 'rgba(0, 0, 0, 1)',
+          borderWidth: 1.5,
+        },
+      ],
+    }}
+    height={400}
+    width={2000}
+    options={{
+      // Options specific to doughnut charts (if needed)
+      cutoutPercentage: 60, // Adjust the hole size in the center (default: 50)
+      maintainAspectRatio: false,
+      legend: {
+        labels: {
+          fontSize: 20,
+        },
+      },
+    }}
+  />}
+    </div>
+
     <div className="leaderboard-container">
       <h2 className="ld-title">LEADERBOARD</h2>
       <table className="leaderboard-table">
       <thead>
       <tr>
         <th></th>
-        <th>Account</th>
-        <th>Score</th>
+        <th>Skills</th>
+        <th>Availability</th>
       </tr>
      </thead>
      <tbody>
 
-     {leaderboardData.map((data, index) => (
+     {showGraph && Object.keys(skills).map((data, index) => (
         <tr key={index}>
           <td>{index + 1}</td> {/* Display row numbers starting from 1 */}
-          <td>{data.account}</td>
-          <td>{data.score}</td>
+          <td>{data}</td>
+          <td>{skills[data]}</td>
         </tr>
       ))}
     
@@ -278,6 +347,9 @@ const ReputationSystem = (props) => {
     </table>
 
     </div>
+
+    
+    
 
       <section className="home-description">
         <img
@@ -402,4 +474,4 @@ const ReputationSystem = (props) => {
   );
 };
 
-export default ReputationSystem;
+export default JobsAvailable;

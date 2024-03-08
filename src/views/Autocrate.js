@@ -126,6 +126,9 @@ const Autocrate = () => {
             <a href="/reputation" className="home-button2 button-clean button">
                 Reputation
             </a>
+            <a href="/jobsavailable" className="home-button2 button-clean button">
+                Jobs Demand Index
+            </a>
               </nav>
             </div>
             <div data-thq="thq-navbar-btn-group" className="home-btn-group">
@@ -189,6 +192,9 @@ const Autocrate = () => {
                   </a>
                   <a href="/reputation" className="home-button2 button-clean button">
                     Reputation
+                  </a>
+                  <a href="/jobsavailable" className="home-button2 button-clean button">
+                    Jobs Demand Index
                   </a>
                 </nav>
                 <div className="home-container2">

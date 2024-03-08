@@ -185,6 +185,9 @@ const Home = (props) => {
             </a>
             <a href="/reputation" className="home-button2 button-clean button">
               Reputation
+            </a>
+            <a href="/jobsavailable" className="home-button2 button-clean button">
+              Jobs Demand Index
             </a></div>}
           </nav>
         </div>
