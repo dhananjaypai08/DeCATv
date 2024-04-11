@@ -3,3 +3,4 @@ node_modules/
 artifacts
 env/
 lucas/__pycache__/
+requirements.txt
