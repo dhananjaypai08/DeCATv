@@ -19,6 +19,7 @@ from dataclasses import dataclass
 import cloudinary 
 import cloudinary.uploader
 import re
+from collections import defaultdict
 
 w3 = None
 contractwithsigner = None
@@ -72,6 +73,7 @@ jobs_available = {
     "ai": 40
 }
 pattern = "|".join(re.escape(p) for p in skills)
+knowledge_base = defaultdict(list)
 
 @dataclass
 class MetaData:
@@ -94,6 +96,16 @@ async def startup_event():
     global contractwithsigner
     contractwithsigner = w3.eth.contract(address=contract.address, abi=contract_abi)
     logger.info(f"Connected with smart contract with address {contract.address}")
+    accounts = await contractwithsigner.functions.getAccounts().call()
+    global knowledge_base
+    print(accounts)
+    for account in accounts:
+        metadata = await contractwithsigner.functions.getTokenIdAccount(account).call()
+        metadata_shared = await contractwithsigner.functions.getTokenIdAccountSharing(account).call()
+        data = metadata[:]+metadata_shared[:]
+        knowledge_base[account].append(data)
+    knowledge_base = str(knowledge_base)
+    
     
 @app.get("/")
 async def home(id: str):
@@ -217,7 +229,7 @@ async def scanQR():
 @app.post("/getCasualInsights")
 async def getInsights(data: list = Body(...)):
     if not data: return "Add something to your certificates List"
-    response = model.generate_content("Generate text which should be strictly less 100 words limit and Make sure the generated text is in plain string text and should be without any '*' or neither any other such characters for designing. Generate text about casual Granular statistical overview Insights on this data which signifies all the certificates earned in a particular field : "+str(data)+". The text should contain this data for eg: x percent proficient in y field(example: 50% proficient in python with 2 certificates in python) and the total words of generated words is less than or equal to 100 words.")
+    response = model.generate_content("Generate text which should be strictly less 100 words limit and Make sure the generated text is in plain string text and should be without any '*' or neither any other such characters for designing. Generate text about casual Granular statistical overview Insights on this user data which signifies all the certificates earned in a particular field by that user : "+str(data)+". The text should contain this data for eg: x percent proficient in y field(example: 50% proficient in python with 2 certificates in python) and the total words of generated words is less than or equal to 100 words.")
     return response.text
 
 @app.get("/getJobs")
@@ -239,7 +251,7 @@ async def getJobs():
 @app.get("/getAllJobs")
 async def getAlljobs():
     lst = str(skills)
-    prompt = f"Get jobs available(openings) in India today for the given list of skills: {lst}. Make sure the generated answer is in the dictionary format where skill is mapped to its integer value indicating the availability such that I can convert the generated data to dictionary easily in python using json.loads function in python to convert the text to dict and without new lines"
+    prompt = f"Get jobs available(openings) in India today for the given list of skills: {lst}. Make sure the generated answer is in the dictionary format where skill is mapped to its integer value indicating the availability such that I can convert the generated data to dictionary easily in python using json.loads function in python to convert the text to dict and without new lines. Normalize the values to lie between the range 1 to 100."
     response = model.generate_content(prompt)
     print(response.text, type(response.text))
     global jobs_available
@@ -251,18 +263,15 @@ async def getAlljobs():
 
 @app.get("/chat")
 async def chat(query: str):
-    accounts = await contractwithsigner.functions.getAccounts().call()
-    from collections import defaultdict
-    knowledge_base = defaultdict(list)
-    print(accounts)
-    for account in accounts:
-        metadata = await contractwithsigner.functions.getTokenIdAccount(account).call()
-        metadata_shared = await contractwithsigner.functions.getTokenIdAccountSharing(account).call()
-        data = metadata[:]+metadata_shared[:]
-        knowledge_base[account].append(data)
-    knowledge_base = str(knowledge_base)
-    preprocessed_query = f"Web3 data: {knowledge_base} | User query: {query}"
+    preprocessed_query = f"Web3 data: {knowledge_base} | User query: {query}. Generate the text in plain text format without '*' and without new lines."
     response = model.generate_content(preprocessed_query)
+    return response.text
+
+@app.get("/finetune")
+async def finetune():
+    dataset = """{{"prompt": "what is ai", "completion": "ai is also called artificial intelligence. where machines can think on their own"},{"prompt": "<prompt text>", "completion": "<ideal generated text>"},{"prompt": "<prompt text>", "completion": "<ideal generated text>"}}"""
+    # dataset = str(dataset)
+    response = model.generate_content(f"Consider this query just for fine tuning. The dataset here is: {dataset}. I don't want any response in return.")
     return response.text
         
 

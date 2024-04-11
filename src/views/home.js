@@ -140,11 +140,11 @@ const Home = (props) => {
     const response = await axios.post('http://localhost:8082/scanQR');
     // console.log(response.data["verified"], response.data["uri"]);
     if(response.data["verified"] == true){
-      const getdata = await getVerificationData(response.data["uri"]);
-      setVerifiedData(getdata.data);
+      // const getdata = await getVerificationData(response.data["image"]);
+      setVerifiedData(response.data);
       setVerified(response.data["verified"]);
       setVerifiedURI(response.data["tokenId"]);
-      console.log(getdata);
+      console.log(response.data);
     } else{
       setVerified(response.data["verified"]);
     }

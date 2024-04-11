@@ -24,6 +24,9 @@ const JobsAvailable = (props) => {
   const [skills, setSkills] = useState();
   const [skill_name, setSkillname] = useState([]);
   const [skill_value, setSkillvalue] = useState([]);
+  const [chat, setChat] = useState();
+  const [showChat, setshowchat] = useState(false);
+  const [prompt, setPrompt] = useState();
 //   const [curr_mints, settotalMints] = useState(0);
 //   const [curr_endorsements_received, setEndorsementReceived] = useState(0);
 //   const [curr_endorsements_given, setEndorsementGiven] = useState(0);
@@ -42,6 +45,16 @@ const JobsAvailable = (props) => {
       connectWallet();
     }
   }
+
+  const ChatwithData = async(event) => {
+    event.preventDefault();
+    const query = document.querySelector('#prompt').value;
+    const response = await axios.get(`http://localhost:8082/chat?query=${query}`);
+    setPrompt(query);
+    setChat(response.data);
+    setshowchat(true);
+    event.target.reset()
+};
 
   const connectWallet = async () => {
     const contractAddress = "0x8264a7B7d02ab5eF1e57d0ad10110686D79d8d46"//"0x681a204B065604B2b2611D0916Dca94b992f0B41";//"0x61eFE56495356973B350508f793A50B7529FF978";
@@ -347,6 +360,25 @@ const JobsAvailable = (props) => {
     </table>
 
     </div>
+
+    <form onSubmit={ChatwithData} className='login-container'>
+        <label className='home-logo'>Ask me anything</label> 
+         <label className='home-links'style={{color: "white"}}>Enter a prompt</label>
+         <input type="text" id="prompt" className="button"></input>
+
+         <button type="submit" className='home-button6 button'>Send</button>
+         
+     </form>
+     {showChat &&
+        <ul className="flex-container">
+          <div className="home-card SBT" style={{width: 700}}>
+          <li className="home-paragraph">Question: {prompt}
+          </li>
+          <li className="home-paragraph">Response: {chat}
+          </li>
+          <br></br>
+          </div>
+        </ul>}
 
     
     
