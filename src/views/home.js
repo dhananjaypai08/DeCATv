@@ -8,6 +8,7 @@ import abi from "../contracts/Autocrate.json";
 //import './App.css';
 import { ethers } from "ethers";
 import axios from "axios";
+import WalletConnect from "./WalletConnect";
 
 import "./home.css";
 import Loginsystem from "./login";
@@ -247,6 +248,8 @@ const Home = (props) => {
         </div>
       </header>
       <button className='home-button6 button' onClick={() => Verify()}>Verify Credentials/Proofs</button>
+      <WalletConnect />
+
     {verified!==undefined && <ul className="home-cards">
       {verified==true &&
       <div className="home-card">
