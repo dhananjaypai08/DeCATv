@@ -28,14 +28,19 @@ DeCAT operates on the secure blockchain, functioning like an on-chain LinkedIn.
 
 DeCAT is live and deployed on the following networks:
 
-1. Arbitrum Goerli
-2. Celo Alfa Jores
-3. Polygon Mumbai
-4. Scroll Sepolia
-5. Sepolia
+1. Polygon ZKEVM Cardona Testnet
+2. Polygon Amoy Testnet
+3. Arbitrum Goerli
+4. Celo Alfa Jores
+5. Polygon Mumbai
+6. Scroll Sepolia
+7. Ethereum Sepolia
+8. Manta Pacific Sepolia Testnet
 
 | Network | Address |
 | --- | --- |
+| Polygon ZKEVM Cardona Testnet | [0xf3704893c6beAAF1335A05582eb9aa2Ba417a807](https://cardona-zkevm.polygonscan.com/tx/0x85346463083111dc26e90d96b004e9200a4ded53fa64698137d36ab20667ba0b) |
+| Polygon Amoy Testnet | [0x816df2a69bB2D246B1ee5a4F2d1B3EbcB3aF7C85](https://www.oklink.com/amoy%E2%80%8D/tx/0x6cd95e03a952ff21ed647f089b6ed48a5e6f5104761724be1ddc6bd8115151c9) |
 | Polygon Mumbai | [0x8691dcC77E0999CbB80d5160031714aEEF64c9D2](https://mumbai.polygonscan.com/address/0x8691dcC77E0999CbB80d5160031714aEEF64c9D2) |
 | Celo Alfajores | [0x9816146ec5f29Bb8de6CCFCd2fD5AA10b75E82bA](https://alfajores.celoscan.io/address/0x9816146ec5f29Bb8de6CCFCd2fD5AA10b75E82bA) |
 | Scroll Seplia | [0x004b833D377e24830d19A5563009d7f1278525b3](https://sepolia.scrollscan.dev/address/0x004b833D377e24830d19A5563009d7f1278525b3) |
@@ -52,3 +57,4 @@ DeCAT is live and deployed on the following networks:
   - ReactJS
   - Ethers
   - Hardhat
+  -Chainlink
