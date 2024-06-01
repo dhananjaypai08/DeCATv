@@ -8,7 +8,7 @@ import abi from "../contracts/Autocrate.json";
 //import './App.css';
 import { ethers } from "ethers";
 import axios from "axios";
-import WalletConnect from "./WalletConnect";
+import { Chainlink } from "dev3-sdk"
 
 import "./home.css";
 import Loginsystem from "./login";
@@ -36,8 +36,15 @@ const Home = (props) => {
   const [verified, setVerified] = useState();
   const [verifiedURI, setVerifiedURI] = useState();
   const [verifiedData, setVerifiedData] = useState();
+  const [aave, setAaveFeed] = useState();
 
   const nftipfsAddress = "https://gateway.lighthouse.storage/ipfs/";
+  const ethSDK = Chainlink.instance("https://ethereum.publicnode.com", Chainlink.PriceFeeds.ETH);
+    // AAVE/ETH price feed
+  ethSDK.getFromOracle(ethSDK.feeds.AAVE_ETH).then((res) => {
+    console.log(res.answer.toString());
+    setAaveFeed(res.answer.toNumber());
+  });
 
   const checkConnectionBeforeConnecting = () => {
     if(!isConnected){
@@ -248,7 +255,6 @@ const Home = (props) => {
         </div>
       </header>
       <button className='home-button6 button' onClick={() => Verify()}>Verify Credentials/Proofs</button>
-      <WalletConnect />
 
     {verified!==undefined && <ul className="home-cards">
       {verified==true &&
@@ -276,6 +282,9 @@ const Home = (props) => {
           <h1 className="home-header">Store. Share. Succeed</h1>
           <p className="home-caption">
           Decentralized Identity Verification and storage system.
+          </p>
+          <p className="home-caption">
+          Total value locked in Aave: {aave}
           </p>
         </div>}
         <div className="home-buttons">
