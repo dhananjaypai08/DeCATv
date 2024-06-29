@@ -49,7 +49,7 @@ const JobsAvailable = (props) => {
   const ChatwithData = async(event) => {
     event.preventDefault();
     const query = document.querySelector('#prompt').value;
-    const response = await axios.get(`http://localhost:8082/chat?query=${query}`);
+    const response = await axios.get(`http://localhost:8001/chat?query=${query}`);
     setPrompt(query);
     setChat(response.data);
     setshowchat(true);
@@ -91,7 +91,7 @@ const JobsAvailable = (props) => {
         const mints = resp.toNumber()
         setMints(mints);
         // const all_accounts = await contractwithsigner.getAccounts();
-        const response_skills = await axios.get('http://localhost:8082/getAllJobs');
+        const response_skills = await axios.get('http://localhost:8001/getAllJobs');
         const skills = response_skills.data;
         console.log(skills);
         setSkills(skills);
@@ -99,7 +99,7 @@ const JobsAvailable = (props) => {
         const skill_values = Object.values(skills);
         setSkillname(skill_names);
         setSkillvalue(skill_values);
-        const response = await axios.get('http://localhost:8082/getJobs');
+        const response = await axios.get('http://localhost:8001/getJobs');
         const all_accounts = response.data[0];
         const all_jobs = response.data[1];
         setReputationScore(all_jobs);
