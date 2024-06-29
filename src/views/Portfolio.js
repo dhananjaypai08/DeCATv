@@ -4,12 +4,13 @@ import Script from "dangerous-html/react";
 import { Helmet } from "react-helmet";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { Redirect } from 'react-router-dom'
+import { Redirect } from 'react-router-dom';
 import abi from "../contracts/Autocrate.json";
 //import './App.css';
 import { ethers } from "ethers";
 
 import "./home.css";
+import Footer from "./Footer";
 // import { useAppContext } from "../AppContext";
 // import { CovalentClient } from "@covalenthq/client-sdk";
 
@@ -242,11 +243,11 @@ const Portfolio = () => {
         </div>
       </header>
       <div className="home-hero">
-      <label className='home-button7 button'>Total DeCAT NFT's Minted to your account: {address_mints}<br></br>
+      <label className='home-button6 button'>Total DeCAT NFT's Minted to your account: {address_mints}<br></br>
       Total DeCAT NFT's Shared to your wallet: {total_endorsed_mints}
       </label>
       </div>
-      <label className='home-button7 button'>Total NFT's Received from DeCAT ORG: {address_mints}
+      <label className='home-button6 button'>Total NFT's Received from DeCAT ORG: {address_mints}
       </label>
       
     <div class="home-container">
@@ -261,7 +262,7 @@ const Portfolio = () => {
     <form onSubmit={getNFT}>
       <div className="home-container" style={{width: 300}}>
         <label className='home-links' style={{color: "white"}}>Enter Wallet Address</label>
-         <input type="text" id="walletaddress" style={{width: 300}} className="button" required></input>
+         <input type="text" id="walletaddress" style={{width: 300}} className="home-button6 button" required></input>
         
          <button type="submit" className='home-button6 button'>Get NFT</button>
       </div>
@@ -279,7 +280,7 @@ const Portfolio = () => {
           <br></br>
           </div>
         </ul>}
-    <label className='home-button7 button'>DeCAT SBT's minted to your account
+    <label className='home-button6 button'>DeCAT SBT's minted to your account
     </label>
         <ul className="flex-container">{fetched_nftdata && 
         nft_data.map((nft, index) => (
@@ -298,7 +299,7 @@ const Portfolio = () => {
     </div>
 
     <div className="home-container">
-    <label className='home-button7 button'>DeCAT SBT's shared to your account
+    <label className='home-button6 button'>DeCAT SBT's shared to your account
       </label>
         <ul className="flex-container">{fetched_nftdata && 
         endorsed_mints.map((nft,index) => (
@@ -325,113 +326,7 @@ const Portfolio = () => {
         
       </section>
       
-      <footer className="home-footer">
-        <div className="home-main5">
-          <div className="home-branding">
-            <div className="home-heading10">
-              <h2 className="home-logo2">Character</h2>
-              <p className="home-caption17">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore.
-              </p>
-            </div>
-            <div className="home-socials1">
-              <a
-                href="https://twitter.com"
-                target="_blank"
-                rel="noreferrer noopener"
-                className="home-twitter1 social button"
-              >
-                <img
-                  alt="image"
-                  src="/Icons/twitter.svg"
-                  className="home-image32"
-                />
-              </a>
-              <a
-                href="https://discord.com"
-                target="_blank"
-                rel="noreferrer noopener"
-                className="home-discord1 social button"
-              >
-                <img
-                  alt="image"
-                  src="/Icons/discord.svg"
-                  className="home-image33"
-                />
-              </a>
-            </div>
-          </div>
-          <div className="home-links1">
-            <div className="home-list1">
-              <h3 className="home-heading11">Site</h3>
-              <div className="home-items">
-                <button className="home-link02 button-clean button">
-                  About
-                </button>
-                <button className="home-link03 button-clean button">
-                  Collection
-                </button>
-                <button className="home-link04 button-clean button">
-                  Roadmap
-                </button>
-                <button className="home-link05 button-clean button">
-                  Features
-                </button>
-              </div>
-            </div>
-            <div className="home-list2">
-              <h3 className="home-heading12">Company</h3>
-              <div className="home-items1">
-                <button className="home-link06 button-clean button">
-                  Team
-                </button>
-                <button className="home-link07 button-clean button">
-                  Press
-                </button>
-                <button className="home-link08 button-clean button">
-                  Terms
-                </button>
-                <button className="home-link09 button-clean button">
-                  Limitations
-                </button>
-                <button className="home-link10 button-clean button">
-                  Licenses
-                </button>
-              </div>
-            </div>
-          </div>
-          <div className="home-socials2">
-            <a
-              href="https://twitter.com"
-              target="_blank"
-              rel="noreferrer noopener"
-              className="home-twitter2 social button"
-            >
-              <img
-                alt="image"
-                src="/Icons/twitter.svg"
-                className="home-image34"
-              />
-            </a>
-            <a
-              href="https://discord.com"
-              target="_blank"
-              rel="noreferrer noopener"
-              className="home-discord2 social button"
-            >
-              <img
-                alt="image"
-                src="/Icons/discord.svg"
-                className="home-image35"
-              />
-            </a>
-          </div>
-        </div>
-        <span className="home-copyright">
-          © 2022 Character. All Rights Reserved.
-        </span>
-      </footer>
+      <Footer></Footer>
       <div>
         <Script>
           

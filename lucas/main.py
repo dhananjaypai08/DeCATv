@@ -1,9 +1,8 @@
 # Web3 imports
-from web3 import Web3, AsyncWeb3
+from web3 import AsyncWeb3
 import json
 # Fastapi imports
-from fastapi import FastAPI, Request, Response, Query, Body
-from fastapi.responses import FileResponse
+from fastapi import FastAPI, Request, Response, Body
 from config import Node, Contract, Google
 import uvicorn
 from middleware.TimeMiddleware import TimeMiddleware
@@ -16,7 +15,6 @@ import qrcode
 import cv2
 from pyzbar.pyzbar import decode
 import google.generativeai as genai
-from dataclasses import dataclass
 import cloudinary 
 import cloudinary.uploader
 import re
@@ -76,21 +74,14 @@ jobs_available = {
 pattern = "|".join(re.escape(p) for p in skills)
 knowledge_base = defaultdict(list)
 
-@dataclass
-class MetaData:
-    name: str
-    description: str
-    imageuri: str
-    tokenId: int
-
 async def read_json():
     file = open(contract.abi_path)
     data = json.load(file)
     file.close()
     return data["abi"]
 
-@asynccontextmanager
-async def lifespan(app: FastAPI):
+@app.on_event("startup")
+async def startup():
     global w3
     w3 = AsyncWeb3(AsyncWeb3.AsyncHTTPProvider(node.url))
     contract_abi = await read_json()
@@ -106,7 +97,6 @@ async def lifespan(app: FastAPI):
         data = metadata[:]+metadata_shared[:]
         knowledge_base[account].append(data)
     knowledge_base = str(knowledge_base)
-    yield
     
     
 @app.get("/")

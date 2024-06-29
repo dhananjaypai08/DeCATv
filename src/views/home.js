@@ -13,6 +13,7 @@ import "./home.css";
 import Loginsystem from "./login";
 import Share from "./Share";
 import { useAppContext } from "../AppContext";
+import Footer from "./Footer";
 
 
 const Home = (props) => {
@@ -314,8 +315,8 @@ const Home = (props) => {
       <p className="caption">
           Your DeCAT Profile:
       </p>
-      <label className='home-button7 button'>Total DeCAT Sharings allowed: {endorsementsAllowed}</label>
-        <label className='home-button7 button'>DeCAT SBT's minted to your account
+      <label className='home-button6 button'>Total DeCAT Sharings allowed: {endorsementsAllowed}</label>
+        <label className='home-button6 button'>DeCAT SBT's minted to your account
         </label>
         <ul><span className="margin-value">{fetched_nftdata && 
         nft_data.map((nft, index) => (
@@ -333,7 +334,7 @@ const Home = (props) => {
     </div>}
     
     {isConnected && <div className="home-container">
-      <label className='home-button7 button'>DeCAT SBT's shared to your account
+      <label className='home-button6 button'>DeCAT SBT's shared to your account
       </label>
         <ul>{fetched_nftdata && 
         endorsed_mints.map((nft, index) => (
@@ -400,112 +401,7 @@ const Home = (props) => {
         
       </section>}
 
-      <footer className="home-footer">
-        <div className="home-main5">
-          <div className="home-branding">
-            <div className="home-heading10">
-              <h2 className="home-logo2">ZKBuilders</h2>
-              <p className="home-caption17">
-              Empower your professional journey with Autocrate. Join us in creating a job market where trust is inherent, and your identity is truly yours. Let's build a decentralized future together.
-              </p>
-            </div>
-            <div className="home-socials1">
-              <a
-                href="https://twitter.com"
-                target="_blank"
-                rel="noreferrer noopener"
-                className="home-twitter1 social button"
-              >
-                <img
-                  alt="image"
-                  src="/Icons/twitter.svg"
-                  className="home-image32"
-                />
-              </a>
-              <a
-                href="https://discord.com"
-                target="_blank"
-                rel="noreferrer noopener"
-                className="home-discord1 social button"
-              >
-                <img
-                  alt="image"
-                  src="/Icons/discord.svg"
-                  className="home-image33"
-                />
-              </a>
-            </div>
-          </div>
-          <div className="home-links1">
-            <div className="home-list1">
-              <h3 className="home-heading11">Site</h3>
-              <div className="home-items">
-                <button className="home-link02 button-clean button">
-                  About
-                </button>
-                <button className="home-link03 button-clean button">
-                  Collection
-                </button>
-                <button className="home-link04 button-clean button">
-                  Roadmap
-                </button>
-                <button className="home-link05 button-clean button">
-                  Features
-                </button>
-              </div>
-            </div>
-            <div className="home-list2">
-              <h3 className="home-heading12">Company</h3>
-              <div className="home-items1">
-                <button className="home-link06 button-clean button">
-                  Team
-                </button>
-                <button className="home-link07 button-clean button">
-                  Press
-                </button>
-                <button className="home-link08 button-clean button">
-                  Terms
-                </button>
-                <button className="home-link09 button-clean button">
-                  Limitations
-                </button>
-                <button className="home-link10 button-clean button">
-                  Licenses
-                </button>
-              </div>
-            </div>
-          </div>
-          <div className="home-socials2">
-            <a
-              href="https://twitter.com"
-              target="_blank"
-              rel="noreferrer noopener"
-              className="home-twitter2 social button"
-            >
-              <img
-                alt="image"
-                src="/Icons/twitter.svg"
-                className="home-image34"
-              />
-            </a>
-            <a
-              href="https://discord.com"
-              target="_blank"
-              rel="noreferrer noopener"
-              className="home-discord2 social button"
-            >
-              <img
-                alt="image"
-                src="/Icons/discord.svg"
-                className="home-image35"
-              />
-            </a>
-          </div>
-        </div>
-        <span className="home-copyright">
-          © 2023 Character. All Rights Reserved.
-        </span>
-      </footer>
+      <Footer></Footer>
       <div>
         <Script>
           
