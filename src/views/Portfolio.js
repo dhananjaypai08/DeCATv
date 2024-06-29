@@ -125,7 +125,7 @@ const Portfolio = () => {
         setNFT(true);
         setNFTData(nft_datas);
         setLoader(false);
-        const casualInsightsdata = await axios.post("http://localhost:8082/getCasualInsights", nft_datas
+        const casualInsightsdata = await axios.post("http://localhost:8001/getCasualInsights", nft_datas
         );
         setCasualInsights(casualInsightsdata.data);
         setCIflag(true);

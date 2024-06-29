@@ -163,7 +163,7 @@ const Home = (props) => {
   };
 
   const Verify = async() => {
-    const response = await axios.post('http://localhost:8082/scanQR');
+    const response = await axios.post('http://localhost:8001/scanQR');
     // console.log(response.data["verified"], response.data["uri"]);
     if(response.data["verified"] == true){
       // const getdata = await getVerificationData(response.data["image"]);
