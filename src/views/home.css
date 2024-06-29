@@ -4,8 +4,72 @@
   /*min-height: 100vh;*/
   align-items: center;
   flex-direction: column;
-  background-color: #151515;
+  background-color: black;
 }
+.input-home-container{
+  background-color: black;
+  height: 50px;
+  border-radius: 10px;
+  border: 1px solid orange;
+  color: white;
+}
+.portfolio-main-section-container{
+  display: flex;
+  margin-top: 40px;
+  padding: 10px;
+  gap: 10px;
+}
+.portfolio-container-main{
+  height: 250px;
+  width: 600px;
+  background-color: #121212;
+  color: white;
+  border: 2px solid white;
+  border-radius: 10px;
+  padding: 50px 10px 15px 10px;
+  font-size: 20px;
+  display: inline;
+  justify-content: center;
+  text-align: center;
+
+}
+.span-portfolio-container-main{
+  padding-top: 10px;
+  color: grey;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}
+.portfolio-container{
+  height: 250px;
+  width: 600px;
+  background-color: #121212;
+  color: white;
+  border: 2px solid white;
+  border-radius: 10px;
+  padding: 50px 10px 15px 10px;
+  font-size: 20px;
+  display: inline;
+  justify-content: center;
+  text-align: center;
+}
+.flex-container {
+  display: flex;
+  flex-direction: row; /* Ensure items are placed in a row */
+  margin-top: 2.5rem; /* 10 multiplied by 0.25rem (default base unit) */
+  justify-content: center;
+  flex-wrap: wrap; /* Optional: to handle smaller screens */
+}
+
+.video {
+  border-radius: 0.5rem; /* rounded-lg */
+  width: 40%; /* w-1/2 */
+  border: 1px solid orange; /* border-orange-700 */
+  box-shadow: 0 1px 2px 0 rgba(249, 115, 22, 0.4); /* shadow-sm and shadow-orange-400 */
+  margin: 0.5rem; /* mx-2 and my-4 */
+}
+
+
 .login-container {
   /* width: 100%;*/
   height: 400px;
@@ -224,7 +288,13 @@
   flex-direction: column;
 }
 .home-header {
-  color: #FFCF77;
+  /* Define the gradient background */
+  background: linear-gradient(to right, #FFB74D, #EF6C00);
+  
+  /* Apply the gradient to the text */
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  
   font-size: 75px;
   /* font-family: "Clepto Regular"; */
   max-width: 1000px;
@@ -234,6 +304,7 @@
   line-height: 98px;
   padding-top: 40px;
 }
+
 .home-caption {
   color: rgb(255, 255, 255);
   font-size: 24px;
@@ -426,7 +497,8 @@
   padding-right: var(--dl-space-space-fiveunits);
   flex-direction: column;
   padding-bottom: var(--dl-space-space-fourunits);
-  background-color: #00ffbd;
+  background-color: orange;
+  border-radius: 15px;
 }
 .home-avatar2 {
   width: 60px;
@@ -1162,12 +1234,22 @@
   line-height: 27px;
 }
 .home-button6 {
-  margin-top: var(--dl-space-space-oneandhalfunits);
-  margin-left: 35%;
-  padding-left: 8%;
-  padding-right: 8%;
   color: #000605;
+  background: linear-gradient(to right, #ea9515, #FB8C00, #F57C00, #EF6C00, #E65100);
+  border: none; /* Remove any border if you want the gradient to be full width */
+  padding: 10px 20px; /* Adjust padding as needed */
+  border-radius: 5px; /* Optional: Add rounded corners */
+  text-align: center; /* Center the text */
+  display: inline-block; /* Ensure it's an inline-block element */
+  cursor: pointer; /* Change cursor to pointer on hover */
+  transition: background 0.3s ease; /* Smooth transition for hover effects */
 }
+
+/* Optional: Add hover effect */
+.home-button6:hover {
+  background: linear-gradient(to right, #FB8C00, #FFCC80, #E65100, #F57C00, #EF6C00);
+}
+
 .home-step1 {
   gap: var(--dl-space-space-oneandhalfunits);
   display: flex;
@@ -2480,7 +2562,11 @@
 
 .caption{
   
-    color: rgb(255, 207, 119);
+  background: linear-gradient(to right, #FFB74D, #EF6C00);
+  
+  /* Apply the gradient to the text */
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
     font-style: normal;
     font-size: 45px;
     font-weight: 1000;
@@ -2520,13 +2606,17 @@
 }
 
 .mint-btn{
-  
     /* color: var(--dl-color-gray-black); */
     color: #fff;
     cursor: pointer;
-    display: inline-block;
-    
-    font-size: 45px;
+    height: 220px;
+    width: 300px;
+    /* display: flex;
+    flex-direction: column; */
+    justify-content:center;
+    text-align: center;
+    margin: auto;
+    font-size: 20px;
     box-shadow: 5px 6px 0px 0px #000000;
     font-style: normal;
     transition: 0.3s;
@@ -2540,8 +2630,19 @@
     padding-bottom: 20px;
     padding-top: 20px;
     /* background-color: rgb(255, 207, 119); */
-    background-color: #232323;
+    background-color: #272525dc;
     margin-top: var(--dl-space-space-oneandhalfunits);
+}
+.volume-comtainer{
+  display: flex;
+  gap:50px;
+  padding-top: 20px;
+}
+.margin-value{
+  /* display: center; */
+  margin: 10px;
+  text-align: center;
+  font-size: 55px;
 }
 
 .reputation-txt{

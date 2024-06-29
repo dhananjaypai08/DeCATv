@@ -8,7 +8,6 @@ import abi from "../contracts/Autocrate.json";
 //import './App.css';
 import { ethers } from "ethers";
 import axios from "axios";
-import { Chainlink } from "dev3-sdk"
 
 import "./home.css";
 import Loginsystem from "./login";
@@ -36,15 +35,10 @@ const Home = (props) => {
   const [verified, setVerified] = useState();
   const [verifiedURI, setVerifiedURI] = useState();
   const [verifiedData, setVerifiedData] = useState();
-  const [aave, setAaveFeed] = useState();
+  const [currentChainId, setChainId] = useState();
 
+  const desiredChainId = 11155111;
   const nftipfsAddress = "https://gateway.lighthouse.storage/ipfs/";
-  const ethSDK = Chainlink.instance("https://ethereum.publicnode.com", Chainlink.PriceFeeds.ETH);
-    // AAVE/ETH price feed
-  ethSDK.getFromOracle(ethSDK.feeds.AAVE_ETH).then((res) => {
-    console.log(res.answer.toString());
-    setAaveFeed(res.answer.toNumber());
-  });
 
   const checkConnectionBeforeConnecting = () => {
     if(!isConnected){
@@ -69,9 +63,34 @@ const Home = (props) => {
         });
         const account = accounts[0];
         const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const network = await provider.getNetwork();
+        console.log(network.chainId);
+        if(network.chainId != desiredChainId){
+          try {
+            await window.ethereum.request({
+              method: 'wallet_switchEthereumChain',
+              params: [{ chainId: `0x${desiredChainId.toString(16)}` }], // Convert ID to hex string
+            });
 
+          } catch (switchError) {
+            // Handle errors (e.g., user rejection, unsupported network)
+            if (switchError.code === 4902) {
+              console.log('User rejected network switch');
+            } else if (switchError.code === -32602) {
+              console.log('Network switch not supported');
+            } else {
+              console.error('Error switching network:', switchError);
+            }
+          }
+        }
+        if(network.chainId != desiredChainId){
+          console.log("connect wallet");
+          return ;
+        }
+        setMsg(account);
+        setChainId(desiredChainId);
         const signer = provider.getSigner();
-
+        setMsg(account);
         const contract = new ethers.Contract(
           contractAddress,
           contractAbi,
@@ -86,7 +105,6 @@ const Home = (props) => {
         if(pass !== undefined && pass !== ""){
           setAdmin(true);
         }
-        setMsg(account);
         const resp = await contractwithsigner.getTotalMints();
         const mints = resp.toNumber()
         setMints(mints);
@@ -201,7 +219,7 @@ const Home = (props) => {
         </div>
         <div data-thq="thq-navbar-btn-group" className="home-btn-group">
           
-          <button onClick={checkConnectionBeforeConnecting} className="button wallet-btn">
+          <button onClick={checkConnectionBeforeConnecting} className="home-button6 button">
             {connectmsg}
           </button>
         </div>
@@ -283,9 +301,6 @@ const Home = (props) => {
           <p className="home-caption">
           Decentralized Identity Verification and storage system.
           </p>
-          <p className="home-caption">
-          Total value locked in Aave: {aave}
-          </p>
         </div>}
         <div className="home-buttons">
           {/* <button onClick={checkConnectionBeforeConnecting} className="button">
@@ -302,7 +317,7 @@ const Home = (props) => {
       <label className='home-button7 button'>Total DeCAT Sharings allowed: {endorsementsAllowed}</label>
         <label className='home-button7 button'>DeCAT SBT's minted to your account
         </label>
-        <ul>{fetched_nftdata && 
+        <ul><span className="margin-value">{fetched_nftdata && 
         nft_data.map((nft, index) => (
         <>
           <div className="home-card" style={{width: 700}} key={index}>
@@ -313,7 +328,7 @@ const Home = (props) => {
           {ipfs_hash == get_nft_cids[index] && <Share passedValue={ipfs_hash} data={selectedData}></Share>}
           </div>
           </>
-        ))}
+        ))}</span>
         </ul>
     </div>}
     
