@@ -8,6 +8,7 @@ from config import Node, Contract, Google
 import uvicorn
 from middleware.TimeMiddleware import TimeMiddleware
 from fastapi.middleware.cors import CORSMiddleware
+from contextlib import asynccontextmanager
 # other imports
 from loguru import logger
 from io import BytesIO
@@ -88,8 +89,8 @@ async def read_json():
     file.close()
     return data["abi"]
 
-@app.on_event("startup")
-async def startup_event():
+@asynccontextmanager
+async def lifespan(app: FastAPI):
     global w3
     w3 = AsyncWeb3(AsyncWeb3.AsyncHTTPProvider(node.url))
     contract_abi = await read_json()
@@ -105,6 +106,7 @@ async def startup_event():
         data = metadata[:]+metadata_shared[:]
         knowledge_base[account].append(data)
     knowledge_base = str(knowledge_base)
+    yield
     
     
 @app.get("/")
@@ -276,4 +278,4 @@ async def finetune():
         
 
 if __name__ == "__main__":
-    uvicorn.run("main:app", port=8082, log_level="info", reload=True)
+    uvicorn.run("main:app", port=8001, log_level="info", reload=True)
