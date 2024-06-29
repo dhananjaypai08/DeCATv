@@ -117,7 +117,7 @@
   transition: transform 0.2s;
 }
 .home-logo:hover{
-  transform: rotate(30deg) scale(1.2);
+  transform: rotate(0deg) scale(0.8);
 }
 .home-desktop-menu {
   display: flex;
@@ -141,7 +141,7 @@
   transition: transform 0.2s;
 }
 .home-button2:hover{
-  transform: rotate(30deg) scale(1.2);
+  transform: rotate(0deg) scale(0.8);
 }
 .home-button3 {
   color: rgb(255, 255, 255);
