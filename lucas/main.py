@@ -19,6 +19,10 @@ import cloudinary
 import cloudinary.uploader
 import re
 from collections import defaultdict
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 w3 = None
 contractwithsigner = None
@@ -48,9 +52,9 @@ genai.configure(api_key=api_key)
 model = genai.GenerativeModel('gemini-pro')
 
 cloudinary.config( 
-  cloud_name = "dzvstpvlt", 
-  api_key = "188374828552585", 
-  api_secret = "vMCoE46Phj4zK5k7Bd13NOHuW78" 
+  cloud_name = os.environ.get("CLOUD_NAME"), 
+  api_key = os.environ.get("CLOUDINARY_API_KEY"), 
+  api_secret = os.environ.get("CLOUDINARY_API_SECRET")
 )
 
 skills = [
